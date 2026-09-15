@@ -153,7 +153,7 @@ const LEARNER_NEXT_STEPS: Partial<Record<keyof ReasoningProfile, string>> = {
   agents:
     "Ask the learner to identify the people who make consequential decisions in this system and explain why those actors matter to the question.",
   attributes:
-    "Ask the learner which differences between agents—such as destination, role, information, or mobility needs—could change their decisions.",
+    "Ask the learner which differences between agents - such as destination, role, information, or mobility needs - could change their decisions.",
   micro:
     "Ask the learner to identify the individual actors and decisions that belong at the micro level.",
   meso:
@@ -163,7 +163,7 @@ const LEARNER_NEXT_STEPS: Partial<Record<keyof ReasoningProfile, string>> = {
   crossLevelInteractions:
     "Ask the learner to trace one decision from the micro level into a station or line-level effect, then explain how a network-level rule shapes it in return.",
   usefulness:
-    "Ask the learner what this decomposition reveals that a simple list of subway components—or a different decomposition—would miss.",
+    "Ask the learner what this decomposition reveals that a simple list of subway components - or a different decomposition - would miss.",
 };
 
 function messageId() {
@@ -582,13 +582,13 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
             Interactive assignment-support demo
           </p>
           <h1 className="max-w-[820px] font-serif text-[clamp(2.75rem,5.4vw,5.25rem)] leading-[0.98] tracking-[-0.045em] text-[#252521]">
-            See how AI could support a learner with an assignment—without doing it for them.
+            See how AI could support a learner with an assignment - without doing it for them.
           </h1>
           <p className="mt-7 max-w-2xl text-[18px] leading-8 text-[#62625c]">
             Imagine you are a learner taking <strong className="font-semibold text-[#252521]">Systems &amp; Society</strong>. You are completing your first assignment: choose a complex social system from the real world and analyse it.
           </p>
           <p className="mt-4 max-w-2xl text-[18px] leading-8 text-[#62625c]">
-            Begin wherever a learner genuinely might: make sense of the instructions, understand the concepts and skills, choose or check a system, or discuss an idea already in progress. You can choose any suitable system—or use the New York City subway as an optional sample.
+            Begin wherever a learner genuinely might: make sense of the instructions, understand the concepts and skills, choose or check a system, or discuss an idea already in progress. You can choose any suitable system - or use the New York City subway as an optional sample.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
@@ -632,7 +632,7 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
               </span>
             </p>
             <p className="mt-5 border-t border-white/10 pt-5 text-sm leading-6 text-white/60">
-              Afterwards, you will see what an instructor could learn from the conversation—and what AI recommends next.
+              Afterwards, you will see what an instructor could learn from the conversation - and what AI recommends next.
             </p>
           </div>
         </aside>
@@ -695,7 +695,7 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
             </section>
 
             <section className="mt-7 border-t border-black/8 pt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">Assessed learning outcomes · select one to see its 0–5 rubric</p>
+              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">Assessed learning outcomes · select one to see its 0-5 rubric</p>
               <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Learning outcome rubrics">
                 {SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => (
                   <button
@@ -1141,7 +1141,7 @@ function InstructorView({
           <div>
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#a9d9d5]">Pre-recorded example · instructor view</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.02] tracking-[-0.035em]">What does the conversation reveal about the learner’s thinking?</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This illustrative readout uses the example transcript—not live AI_thena evidence. It is formative evidence for instructor review, not an automated grade or a claim of durable mastery.</p>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This illustrative readout uses the example transcript - not live AI_thena evidence. It is formative evidence for instructor review, not an automated grade or a claim of durable mastery.</p>
             <button type="button" onClick={onAssignment} className="mt-5 text-xs font-bold text-[#a9d9d5] underline decoration-white/20 underline-offset-4 hover:text-white">Review the relevant assignment instructions</button>
           </div>
           <div className="flex-none rounded-2xl bg-white/8 p-5 text-right ring-1 ring-white/10">
@@ -1168,7 +1168,7 @@ function InstructorView({
             const present = Boolean(currentProfile[item.key]);
             return (
               <div key={item.key} className={`rounded-2xl p-4 ring-1 ${present ? "bg-[#edf6f4] ring-[#155f64]/15" : "bg-[#f4f2ed] ring-black/5"}`}>
-                <div className="flex items-center justify-between gap-2"><p className="text-sm font-bold">{item.label}</p><span aria-label={present ? "Observed" : "Not yet observed"} className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${present ? "bg-[#155f64] text-white" : "bg-black/7 text-[#777770]"}`}>{present ? "✓" : "—"}</span></div>
+                <div className="flex items-center justify-between gap-2"><p className="text-sm font-bold">{item.label}</p><span aria-label={present ? "Observed" : "Not yet observed"} className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${present ? "bg-[#155f64] text-white" : "bg-black/7 text-[#777770]"}`}>{present ? "✓" : "-"}</span></div>
                 <p className="mt-2 text-xs leading-5 text-[#6d6d66]">{item.description}</p>
               </div>
             );
@@ -1247,7 +1247,7 @@ function LiveInstructorView({
     return !/no evidence|not reached|no engagement|not observed|insufficient opportunity/.test(summary);
   };
   const outcomeKey = (value: string) =>
-    value.split(/[—–-]/)[0].replace(/[^a-z]/gi, "").toLowerCase();
+    value.split("-")[0].replace(/[^a-z]/gi, "").toLowerCase();
   const assessmentByOutcome = new Map<string, EvidenceSnapshot["loAssessments"][number]>();
   for (const assessment of snapshot.loAssessments) {
     const key = outcomeKey(assessment.learningOutcome);
@@ -1273,8 +1273,8 @@ function LiveInstructorView({
           <div>
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#a9d9d5]">Live AI_thena evidence · instructor view</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.02] tracking-[-0.035em]">What does this conversation actually reveal?</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This readout comes from the session AI_thena just persisted and analyzed. It is formative evidence for review—not an automated grade or a claim of durable mastery.</p>
-            <button type="button" onClick={onAssignment} className="mt-5 text-xs font-bold text-[#a9d9d5] underline decoration-white/20 underline-offset-4 hover:text-white">Compare with the assignment and 0–5 rubric</button>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This readout comes from the session AI_thena just persisted and analyzed. It is formative evidence for review - not an automated grade or a claim of durable mastery.</p>
+            <button type="button" onClick={onAssignment} className="mt-5 text-xs font-bold text-[#a9d9d5] underline decoration-white/20 underline-offset-4 hover:text-white">Compare with the assignment and 0-5 rubric</button>
           </div>
           <div className="flex-none rounded-2xl bg-white/8 p-5 text-right ring-1 ring-white/10">
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">AI_thena outcome status</p>
@@ -1394,7 +1394,7 @@ function LiveInstructorView({
       <section className="rounded-[22px] border border-dashed border-black/15 p-6">
         <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#777770]">Evidence boundary</p>
         <ul className="mt-3 grid gap-2 text-xs leading-5 text-[#696961] sm:grid-cols-2">
-          {snapshot.limitations.map((limitation) => <li key={limitation}>— {limitation}</li>)}
+          {snapshot.limitations.map((limitation) => <li key={limitation}>- {limitation}</li>)}
         </ul>
         <button type="button" onClick={onReviewer} className="mt-6 text-xs font-bold text-[#155f64] hover:underline">Evaluate the demo as a colleague →</button>
       </section>
@@ -1432,12 +1432,12 @@ function ReviewerView({ onInstructor }: { onInstructor: () => void }) {
       <section className="text-center">
         <span className="inline-flex rounded-full bg-[#e7dfd0] px-3 py-1.5 text-[11px] font-bold text-[#745b33]">You are back in your colleague role</span>
         <h1 className="mx-auto mt-5 max-w-3xl font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.04em]">Is this a credible way to support learning and inform teaching?</h1>
-        <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-[#696961]">Rate what this experience actually demonstrated. A score of 5 should mean the dimension is convincingly realised—not simply that the idea is promising.</p>
+        <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-[#696961]">Rate what this experience actually demonstrated. A score of 5 should mean the dimension is convincingly realised - not simply that the idea is promising.</p>
       </section>
 
       <section className="mt-8 rounded-[24px] bg-[#242a29] p-6 text-white sm:p-7">
         <div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <div><p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#9ed2cf]">Optional stress tests</p><h2 className="mt-2 font-serif text-2xl tracking-[-0.02em]">Probe the product—not the learner</h2></div>
+          <div><p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#9ed2cf]">Optional stress tests</p><h2 className="mt-2 font-serif text-2xl tracking-[-0.02em]">Probe the product - not the learner</h2></div>
           <ul className="grid gap-2 text-xs leading-5 text-white/68 sm:grid-cols-2">
             <li>Ask it to explain the complete instructions or a rubric distinction.</li>
             <li>Propose a system that may be complicated but not genuinely social.</li>

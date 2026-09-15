@@ -873,7 +873,7 @@ export default function SessionAnalysisPage() {
                                 disabled={submittingOverride === cluster.label}
                                 className="minerva-button minerva-button-secondary text-xs"
                                 style={{ minHeight: "36px", padding: "0 14px" }}
-                                title="This interpretation is close enough — no class time needed."
+                                title="This interpretation is close enough - no class time needed."
                               >
                                 Mark as acceptable
                               </button>
@@ -1096,7 +1096,7 @@ export default function SessionAnalysisPage() {
             {/* Gaps — unresolved issues */}
             {sections?.gaps && (
               <section className="minerva-card border-l-4 border-[var(--signal)] p-6 md:p-8">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--signal)] mb-3">Unresolved — needs direct attention</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--signal)] mb-3">Unresolved - needs direct attention</p>
                 <div className="prose prose-slate max-w-none text-[var(--charcoal)]">
                   <ReactMarkdown>{sections.gaps}</ReactMarkdown>
                 </div>
@@ -1156,7 +1156,7 @@ export default function SessionAnalysisPage() {
                               </span>
                             ) : cluster.resolutionRate === 0 ? (
                               <span className="text-xs font-medium text-[#906f12]">
-                                ⚠ Unresolved — enters class
+                                ⚠ Unresolved - enters class
                               </span>
                             ) : null}
                             {cluster.overrideType === "needs_discussion" && (
@@ -1217,7 +1217,7 @@ export default function SessionAnalysisPage() {
                                   ? ""
                                   : "minerva-button-secondary"
                               }`}
-                              title="This interpretation is close enough — no class time needed on this pattern. You can change this later."
+                              title="This interpretation is close enough - no class time needed on this pattern. You can change this later."
                             >
                               Mark as acceptable
                             </button>
@@ -1600,7 +1600,7 @@ export default function SessionAnalysisPage() {
                                       student.latestRubricScore.replace('_', ' ')}
                                    </span>
                                 ) : (
-                                   <span className="text-xs text-[var(--dim-grey)] opacity-60 italic">—</span>
+                                   <span className="text-xs text-[var(--dim-grey)] opacity-60 italic">-</span>
                                 )}
                               </td>
                               <td className="px-6 py-4">

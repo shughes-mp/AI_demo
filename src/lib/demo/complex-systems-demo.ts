@@ -42,7 +42,7 @@ export const SYSTEMS_SOCIETY_DEMO = {
     currentTask:
       "Choose and justify a complex social system, then develop a question-driven analysis using the assignment's learning outcomes and requirements.",
     constraints: [
-      "800–1,000 words",
+      "800-1,000 words",
       "Use reliable sources and APA style",
       "Do not use quotations",
       "Add learning-outcome footnotes",
@@ -77,7 +77,7 @@ export const SYSTEMS_SOCIETY_DEMO = {
     },
   ],
   submissionRequirements: [
-    "800–1,000 words; the title page, footnotes, and reference list are excluded from the count",
+    "800-1,000 words; the title page, footnotes, and reference list are excluded from the count",
     "APA title page, leveled headings, in-text citations, and reference list",
     "Every in-text citation must have a matching reference, and the reference list should contain only sources used",
     "No quotations may be used",
@@ -166,7 +166,7 @@ export const SYSTEMS_SOCIETY_DEMO = {
         "Shows a developing understanding with major gaps and remains below course requirements.",
         "Deconstructs the system only partly effectively or misses relevant levels or the explanatory purpose.",
         "Uses plausible components and appropriate levels, explains why the decomposition is useful, and identifies meaningful interactions between levels.",
-        "Justifies why the chosen decomposition best addresses a clear explanatory challenge, explains the significance of the levels and their interactions, and—where useful—compares alternative decompositions.",
+        "Justifies why the chosen decomposition best addresses a clear explanatory challenge, explains the significance of the levels and their interactions, and - where useful - compares alternative decompositions.",
       ],
     },
     {
@@ -214,7 +214,7 @@ export const SYSTEMS_SOCIETY_DEMO = {
       "Shows a developing understanding with major gaps and remains below the course requirements.",
       "Deconstructs the system only partly effectively or misses relevant levels or the explanatory purpose.",
       "Uses plausible components and appropriate levels, explains why the decomposition is useful, and identifies meaningful interactions between levels.",
-      "Justifies why the chosen decomposition best addresses a clear explanatory challenge, explains the significance of the levels and their interactions, and—where useful—compares alternative decompositions.",
+      "Justifies why the chosen decomposition best addresses a clear explanatory challenge, explains the significance of the levels and their interactions, and - where useful - compares alternative decompositions.",
     ],
   },
   initialAttempt:
@@ -409,7 +409,7 @@ export function buildCoachResponse(value: string, supportLevel = 1): CoachRespon
       message:
         "You have started naming parts of the subway. A strong system analysis begins with the question the decomposition is meant to answer.",
       prompt:
-        "What do you want to explain about the New York City subway—for example, how a disruption travels, how passenger decisions affect service, or why experiences differ across the network?",
+        "What do you want to explain about the New York City subway - for example, how a disruption travels, how passenger decisions affect service, or why experiences differ across the network?",
     };
   }
 
@@ -420,7 +420,7 @@ export function buildCoachResponse(value: string, supportLevel = 1): CoachRespon
       message:
         "Your question gives the analysis direction. Now identify the people whose decisions matter and the differences between them that could change those decisions.",
       prompt:
-        "Choose two agents. What can each one decide, and which attribute—such as role, destination, information, or mobility needs—matters to your question?",
+        "Choose two agents. What can each one decide, and which attribute - such as role, destination, information, or mobility needs - matters to your question?",
     };
   }
 
@@ -455,7 +455,7 @@ export function buildCoachResponse(value: string, supportLevel = 1): CoachRespon
       message:
         "The parts and interactions are becoming clearer. Now explain why this particular map of the system is useful for your chosen question.",
       prompt:
-        "What can your decomposition explain that a simple list of subway components—or a different decomposition—would miss?",
+        "What can your decomposition explain that a simple list of subway components - or a different decomposition - would miss?",
     };
   }
 

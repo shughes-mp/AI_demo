@@ -125,7 +125,7 @@ export function TeachingBriefEvidenceMap({
                     <footer className="mt-1 text-xs text-[var(--dim-grey)]">
                       {reference.learnerName || reference.sourceFilename || reference.citationType}
                       {reference.relevanceRationale
-                        ? ` — ${reference.relevanceRationale}`
+                        ? ` - ${reference.relevanceRationale}`
                         : ""}
                     </footer>
                   </blockquote>

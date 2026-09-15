@@ -309,7 +309,7 @@ export default function StudentMonitorPage() {
                                 </span>
                               ) : null}
                               {!student.hasRecentEngagementConcern && (!student.isWaitingForStudentReply || (student.secondsSinceLastMessage && student.secondsSinceLastMessage <= 180)) ? (
-                                <span className="text-xs text-[var(--dim-grey)] text-opacity-60">—</span>
+                                <span className="text-xs text-[var(--dim-grey)] text-opacity-60">-</span>
                               ) : null}
                               {student.reviewSignals.length > 0 ? (
                                 <details className="mt-1 max-w-sm text-xs text-[var(--dim-grey)]">
@@ -365,7 +365,7 @@ export default function StudentMonitorPage() {
                                 {student.misconceptionCount} unresolved signal{student.misconceptionCount !== 1 ? "s" : ""}
                               </span>
                             ) : (
-                              <span className="text-xs text-[var(--dim-grey)] text-opacity-60">—</span>
+                              <span className="text-xs text-[var(--dim-grey)] text-opacity-60">-</span>
                             )}
                           </td>
                           <td className="px-6 py-4 text-[var(--dim-grey)]">

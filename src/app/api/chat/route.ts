@@ -430,12 +430,13 @@ export async function POST(req: Request) {
             parsedResponse.cleanedText,
             knowledgeScope
           );
-          const finalCleanedText =
+          const groundedResponse =
             requiresGrounding && validCitations.length === 0
               ? buildUnsupportedSourceResponse()
               : learnerCitationVisible
                 ? appendLearnerCitations(transparentResponse, validCitations)
                 : transparentResponse;
+          const finalCleanedText = groundedResponse.replace(/[\u2014\u2013]/g, "-");
           const groundingStatus = requiresGrounding
             ? validCitations.length > 0
               ? knowledgeScope === "mixed"

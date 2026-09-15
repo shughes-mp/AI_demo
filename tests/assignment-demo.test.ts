@@ -205,6 +205,23 @@ test("the demo opens without a model call and reports unavailable model credits 
   assert.match(chatRoute, /restore its Anthropic API access/);
 });
 
+test("learner-facing demo sources use ordinary hyphens instead of em or en dashes", () => {
+  const sources = [
+    "../src/app/demo/assignment-demo.tsx",
+    "../src/app/api/demo/opening/route.ts",
+    "../src/app/api/demo/start/route.ts",
+    "../src/lib/demo/complex-systems-demo.ts",
+    "../src/lib/system-prompt.ts",
+    "../src/lib/report-generator.ts",
+    "../src/lib/teaching-brief-export.ts",
+  ];
+
+  for (const source of sources) {
+    const content = readFileSync(new URL(source, import.meta.url), "utf8");
+    assert.doesNotMatch(content, /[—–]/, `${source} contains a long dash`);
+  }
+});
+
 test("the no-login demo bypasses Clerk while instructor pages remain protected", () => {
   const proxy = readFileSync(
     new URL("../src/proxy.ts", import.meta.url),

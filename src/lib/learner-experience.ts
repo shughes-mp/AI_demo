@@ -109,6 +109,7 @@ Give one open question for the next learning moment.
 Include exactly this sentence: "This AI-generated summary may be incomplete or inaccurate; you can add a reflection or correction before your instructor reviews it."
 
 Do not add a preamble or closing outside these sections. Keep each content section to 1-4 bullets.
+Never use an em dash or en dash. Use the ordinary hyphen character (-) or rewrite the sentence.
 
 Unresolved misunderstandings:
 ${input.unresolvedMisconceptions.map((item) => `- ${item.topicThread}: ${item.description}`).join("\n") || "None recorded"}
@@ -206,7 +207,7 @@ export function validateLearnerSummary(
     return conservativeLearnerSummary(messages, unresolvedMisconceptions);
   }
 
-  return generated.slice(firstHeading).trim();
+  return generated.slice(firstHeading).trim().replace(/[\u2014\u2013]/g, "-");
 }
 
 export interface LearnerReflectionInput {

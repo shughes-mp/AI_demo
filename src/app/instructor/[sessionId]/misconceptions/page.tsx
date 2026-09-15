@@ -643,7 +643,7 @@ export default function MisconceptionDashboardPage() {
                               Median turns to resolve
                             </p>
                             <p className="mt-1 font-semibold text-[var(--charcoal)]">
-                              {cluster.medianTurnsToResolve ?? "—"}
+                              {cluster.medianTurnsToResolve ?? "-"}
                             </p>
                           </div>
 

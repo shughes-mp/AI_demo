@@ -6,7 +6,7 @@ import { checkRateLimit, rateLimitExceededResponse } from "@/lib/rate-limit";
 const DEMO_SESSION_NAME_PREFIX = "AI_thena colleague demo ·";
 const DEMO_OPENING = `Welcome to the Systems & Society assignment.
 
-You do not need to have chosen a system—or even know where to begin. I can help you make sense of the task, understand the key concepts, choose or test a system, or discuss work you have started. The decisions and writing stay yours.
+You do not need to have chosen a system - or even know where to begin. I can help you make sense of the task, understand the key concepts, choose or test a system, or discuss work you have started. The decisions and writing stay yours.
 
 **Where would you like to begin?**`;
 

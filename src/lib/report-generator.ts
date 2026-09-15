@@ -74,7 +74,7 @@ IMPORTANT: Format as a structured list, one topic per line:
       perStudentInstruction: "For each student: 2-3 sentences covering readiness level, key gaps to watch for during class, and one strength to build on. Flag students who may need extra support during class activities.",
     },
     during_class_prep: {
-      overallFrame: "This was a DURING-CLASS PREP session (activation phase). Help the instructor understand what prior knowledge students activated and where retrieval gaps exist — so they can adapt the class session that is about to begin.",
+      overallFrame: "This was a DURING-CLASS PREP session (activation phase). Help the instructor understand what prior knowledge students activated and where retrieval gaps exist - so they can adapt the class session that is about to begin.",
       heatmapTitle: "ACTIVATION EVIDENCE MAP",
       heatmapInstruction: `Classify observed ACTIVATION EVIDENCE on each major topic as GREEN (strong retrieval, ready for application), YELLOW (partial retrieval, may need brief review before applying), or RED (failed to retrieve or retrieved incorrectly).
 Write ONE sentence summarizing what the class is primed for.
@@ -85,7 +85,7 @@ IMPORTANT: Format as a structured list, one topic per line:
       strengthsSectionTitle: "WHAT YOUR STUDENTS RECALLED WELL",
       gapsSectionTitle: "WHERE RETRIEVAL WAS WEAK",
       nextStepsInstruction: "For each weak area, suggest a quick in-class move the instructor can use in the NEXT FEW MINUTES. Keep suggestions actionable within the current class period: 'Before starting the activity, briefly clarify...' or 'During the debrief, revisit...'",
-      perStudentInstruction: "For each student: 1-2 sentences on what they activated successfully and what the instructor should watch for during the upcoming activity. Keep very brief — the instructor is about to start teaching.",
+      perStudentInstruction: "For each student: 1-2 sentences on what they activated successfully and what the instructor should watch for during the upcoming activity. Keep very brief - the instructor is about to start teaching.",
     },
     during_class_reflection: {
       overallFrame: "This was a DURING-CLASS REFLECTION session (consolidation phase). Help the instructor understand what students consolidated from the class session and what remains fragile before they leave.",
@@ -98,7 +98,7 @@ IMPORTANT: Format as a structured list, one topic per line:
 - **Topic name**: [RED] Brief explanation`,
       strengthsSectionTitle: "WHAT YOUR STUDENTS CONSOLIDATED",
       gapsSectionTitle: "WHAT REMAINS FRAGILE",
-      nextStepsInstruction: "For each fragile area, suggest what the instructor should do BEFORE THE NEXT CLASS to reinforce it. Frame as 'For homework, ask students to...' or 'In the next session, start by...' Leverage spacing — suggest revisiting fragile topics after a delay.",
+      nextStepsInstruction: "For each fragile area, suggest what the instructor should do BEFORE THE NEXT CLASS to reinforce it. Frame as 'For homework, ask students to...' or 'In the next session, start by...' Leverage spacing - suggest revisiting fragile topics after a delay.",
       perStudentInstruction: "For each student: 2-3 sentences on what they consolidated, their key takeaway, and what the instructor should follow up on. Note gaps between student confidence and actual understanding.",
     },
     after_class: {
@@ -113,7 +113,7 @@ IMPORTANT: Format as a structured list, one topic per line:
       strengthsSectionTitle: "WHERE YOUR STUDENTS SHOWED DEPTH",
       gapsSectionTitle: "WHERE TRANSFER BROKE DOWN",
       nextStepsInstruction: "For each transfer gap, suggest how the instructor can build toward transfer in future sessions or assignments. Frame as 'In a future session, try...' or 'For the next assignment, consider...' Note which learning outcomes have sufficient evidence for assessment.",
-      perStudentInstruction: "For each student: 2-3 sentences on transfer capability, strongest application examples, and areas where understanding remains surface-level. Include LO evidence quality — which outcomes have strong evidence and which need more opportunities?",
+      perStudentInstruction: "For each student: 2-3 sentences on transfer capability, strongest application examples, and areas where understanding remains surface-level. Include LO evidence quality - which outcomes have strong evidence and which need more opportunities?",
     },
   };
 
@@ -126,7 +126,7 @@ function buildReportSystemPrompt(sessionPurpose: string): string {
   return `You generate instructor teaching briefs from AI_thena learning sessions. ${framing.overallFrame} Write in professional, direct prose. Use these section headers exactly:
 
 SESSION SNAPSHOT
-- Session name, number of students, total exchanges, session purpose. One sentence framing how the session went overall — momentum, not just numbers.
+- Session name, number of students, total exchanges, session purpose. One sentence framing how the session went overall - momentum, not just numbers.
 
 HOW TO READ THIS BRIEF
 - In four short bullets distinguish observed evidence, AI inference, confidence, and instructor review.
@@ -134,7 +134,8 @@ HOW TO READ THIS BRIEF
 
 SUGGESTED TEACHING MOVES
 - For each gap identified in the session, suggest one concrete, specific teaching move. ${framing.nextStepsInstruction}
-- Connect each suggestion to the evidence. Do not give generic advice — tie it to what actually happened.
+- Connect each suggestion to the evidence. Do not give generic advice - tie it to what actually happened.
+- Never use em dashes or en dashes in the teaching brief. Use the ordinary hyphen character (-) or rewrite the sentence.
 
 ${framing.heatmapTitle}
 ${framing.heatmapInstruction}
@@ -390,7 +391,10 @@ export async function generateInstructorReport(sessionId: string) {
   });
 
   const assessmentMatches = extractLOAssessmentTags(text);
-  const cleanReportText = redactInternalIdentifiers(stripLOAssessmentTags(text));
+  const cleanReportText = redactInternalIdentifiers(stripLOAssessmentTags(text)).replace(
+    /[\u2014\u2013]/g,
+    "-"
+  );
 
   const statsObject = {
     exchanges: totalExchanges,
@@ -418,7 +422,8 @@ export async function generateInstructorReport(sessionId: string) {
       const loText = match[2]?.trim() ?? "";
       const status = match[3]?.trim().toLowerCase() ?? "";
       const confidence = match[4]?.trim().toLowerCase() ?? "";
-      const evidenceSummary = match[5]?.trim() ?? null;
+      const evidenceSummary =
+        match[5]?.trim().replace(/[\u2014\u2013]/g, "-") ?? null;
 
       if (
         !VALID_LO_STATUSES.includes(status as (typeof VALID_LO_STATUSES)[number]) ||

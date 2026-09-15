@@ -40,7 +40,7 @@ function renderReferences(references: TeachingBriefEvidenceReference[]) {
     .map(
       (reference) => `<blockquote>
         “${escapeHtml(stripInlineMarkdown(reference.quotedText))}”
-        <footer>${escapeHtml(reference.learnerName ?? reference.sourceFilename ?? reference.citationType)} — ${escapeHtml(reference.relevanceRationale)}</footer>
+        <footer>${escapeHtml(reference.learnerName ?? reference.sourceFilename ?? reference.citationType)} - ${escapeHtml(reference.relevanceRationale)}</footer>
       </blockquote>`
     )
     .join("");
@@ -119,7 +119,7 @@ export function buildTeachingBriefExportHtml(input: {
   <html lang="en">
     <head>
       <meta charset="utf-8">
-      <title>${escapeHtml(input.sessionName)} — Teaching Brief</title>
+      <title>${escapeHtml(input.sessionName)} - Teaching Brief</title>
       <style>
         @page { size: A4; margin: 20mm 16mm 22mm; }
         * { box-sizing: border-box; }

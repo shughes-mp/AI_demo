@@ -847,7 +847,7 @@ export default function SessionManagementPage() {
                   className={`minerva-button ${previewReady ? "" : "pointer-events-none opacity-50"}`}
                   aria-disabled={!previewReady}
                 >
-                  {previewChecked ? "Preview checked — open again" : "Preview learner experience"}
+                  {previewChecked ? "Preview checked - open again" : "Preview learner experience"}
                 </Link>
               </div>
 
