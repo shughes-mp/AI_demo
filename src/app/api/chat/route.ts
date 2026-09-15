@@ -391,18 +391,17 @@ export async function POST(req: Request) {
     const encoder = new TextEncoder();
     let capturedDiagnosticInput: Parameters<typeof runDiagnostic>[0] | null =
       null;
+    const anthropicStream = await getAnthropic().messages.create({
+      model: MODEL_PRIMARY,
+      system: systemPrompt,
+      messages: anthropicMessages,
+      max_tokens: 1400,
+      stream: true,
+    });
 
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          const anthropicStream = await getAnthropic().messages.create({
-            model: MODEL_PRIMARY,
-            system: systemPrompt,
-            messages: anthropicMessages,
-            max_tokens: 1400,
-            stream: true,
-          });
-
           let fullResponse = "";
 
           for await (const event of anthropicStream) {
@@ -721,9 +720,17 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Chat API Error:", error);
+    const creditsUnavailable =
+      error instanceof Error &&
+      /credit balance is too low|plans\s*&\s*billing/i.test(error.message);
     return NextResponse.json(
-      { error: "Failed to process chat request", code: "CHAT_FAILED" },
-      { status: 500 }
+      {
+        error: creditsUnavailable
+          ? "AI_thena’s model connection is temporarily unavailable. The demo owner needs to restore its Anthropic API access before live replies can continue."
+          : "AI_thena could not process that message. Please try again.",
+        code: creditsUnavailable ? "MODEL_CREDITS" : "CHAT_FAILED",
+      },
+      { status: creditsUnavailable ? 503 : 500 }
     );
   }
 }

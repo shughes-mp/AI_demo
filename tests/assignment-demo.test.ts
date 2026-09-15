@@ -160,7 +160,9 @@ test("the live learner start routes foundational needs and keeps demo-only probe
   assert.match(component, /Not selected yet/);
   assert.doesNotMatch(component, /Share the example learner’s first attempt/);
   assert.match(component, /Optional stress tests/);
-  assert.match(openingRoute, /Do not demand an assignment attempt/);
+  assert.match(openingRoute, /const DEMO_OPENING/);
+  assert.match(openingRoute, /Where would you like to begin\?/);
+  assert.doesNotMatch(openingRoute, /messages\.create/);
 });
 
 test("the demo uses the original waiting animation and context-neutral learner language", () => {
@@ -185,6 +187,22 @@ test("the demo uses the original waiting animation and context-neutral learner l
   assert.match(startRoute, /LEARNER-FACING VOICE AND EXPERIENCE/);
   assert.match(startRoute, /Do not describe every contribution as "reasoning/);
   assert.match(startRoute, /thoughtful practitioner with a point of view/);
+});
+
+test("the demo opens without a model call and reports unavailable model credits accurately", () => {
+  const component = readFileSync(
+    new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
+    "utf8"
+  );
+  const chatRoute = readFileSync(
+    new URL("../src/app/api/chat/route.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(component, /failure\.error/);
+  assert.match(chatRoute, /MODEL_CREDITS/);
+  assert.match(chatRoute, /credit balance is too low/);
+  assert.match(chatRoute, /restore its Anthropic API access/);
 });
 
 test("the no-login demo bypasses Clerk while instructor pages remain protected", () => {

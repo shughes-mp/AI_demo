@@ -334,7 +334,13 @@ export function AssignmentDemo() {
           }),
         });
 
-        if (!response.ok || !response.body) throw new Error("Live response unavailable");
+        if (!response.ok) {
+          const failure = await response.json().catch(() => ({}));
+          throw new Error(
+            failure.error || "AI_thena could not respond. Please try again."
+          );
+        }
+        if (!response.body) throw new Error("AI_thena returned no response.");
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let done = false;
@@ -352,13 +358,15 @@ export function AssignmentDemo() {
             );
           }
         }
-      } catch {
+      } catch (chatError) {
         setConnectionMode("unavailable");
         setMessages((current) =>
           current.filter((message) => message.id !== assistantId)
         );
         setError(
-          "The live AI response failed. No simulated response has been substituted; you can retry from the beginning or inspect the pre-recorded example."
+          chatError instanceof Error
+            ? chatError.message
+            : "The live AI response failed. No simulated response has been substituted."
         );
       } finally {
         setIsSending(false);
