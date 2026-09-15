@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { TypingIndicator } from "@/components/chat/typing-indicator";
 import {
   SYSTEMS_SOCIETY_DEMO,
   analyzeReasoning,
@@ -370,8 +371,8 @@ export function AssignmentDemo() {
     if (transferStart === null) setTransferStart(learnerMessages.length);
     void sendMessage(
       selectedSystem
-        ? `I’m ready to test my thinking with less support. Give me a changed question about ${selectedSystem} that requires me to reapply the most relevant assignment skill, but do not give me the reasoning or answer.`
-        : "I’m ready to test my thinking with less support. Give me a changed complex-social-system example that requires me to reapply the most relevant assignment skill, but do not give me the reasoning or answer."
+        ? `Can I try a new question about ${selectedSystem} with less help this time?`
+        : "Can I try a new complex-systems question with less help this time?"
     );
   }
 
@@ -380,7 +381,7 @@ export function AssignmentDemo() {
     if (!clean) return;
     setSelectedSystem(clean);
     void sendMessage(
-      `I am considering ${clean} for the assignment. Before we assume it is suitable, help me test whether it is genuinely both complex and social. Ask me to make the case rather than deciding for me.`
+      `I’m considering ${clean}. Would it work as a complex social system for this assignment?`
     );
   }
 
@@ -528,7 +529,7 @@ export function AssignmentDemo() {
                 onMoreSupport={() => {
                   setSupportLevel((level) => Math.min(level + 1, 6));
                   void sendMessage(
-                    "I’m still struggling. Please give me the next-smallest hint that would help me continue, without doing the reasoning for me."
+                    "I’m still stuck. Can you give me one more hint?"
                   );
                 }}
                 onReducedSupport={beginReducedSupportCheck}
@@ -942,7 +943,7 @@ function LearnerView({
         <header className="flex items-center justify-between border-b border-black/7 px-5 py-4 sm:px-7">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#155f64] font-serif text-lg text-white">A</span>
-            <div><h2 className="text-sm font-bold">AI_thena coach</h2><p className="text-xs text-[#777770]">Socratic assignment support</p></div>
+            <div><h2 className="text-sm font-bold">AI_thena coach</h2><p className="text-xs text-[#777770]">Helps you think without writing for you</p></div>
           </div>
           <ModeBadge mode={connectionMode} />
         </header>
@@ -969,15 +970,19 @@ function LearnerView({
             <div className="ml-12 max-w-2xl pt-1">
               <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#8b8b84]">Where would you like to begin?</p>
               <div className="grid gap-2 sm:grid-cols-2">
-                <QuickPrompt label="Help me understand the assignment" onClick={() => onSend("I’m new to this assignment. Help me understand what I need to produce, the main steps, and the important constraints. Then check what I have understood.")} />
-                <QuickPrompt label="Explain the key concepts and skills" onClick={() => onSend("I’m not yet confident about the concepts and skills this assignment requires. Help me identify what I need to understand, then start with the most foundational distinction.")} />
-                <QuickPrompt label="Help me choose or check a system" onClick={() => onSend("I need help choosing—or checking—a suitable complex social system. Ask about my interests and help me test my own candidates without choosing for me.")} />
-                <QuickPrompt label="I have an idea or draft to discuss" onClick={() => onSend("I already have an idea or some work in progress. Ask me to share it, then help me evaluate it against the relevant assignment criteria.")} />
+                <QuickPrompt label="Help me understand the assignment" onClick={() => onSend("I’m new to this. What exactly do I need to do?")} />
+                <QuickPrompt label="Explain the key concepts and skills" onClick={() => onSend("I’m not sure I understand the main concepts yet. Can we start there?")} />
+                <QuickPrompt label="Help me choose or check a system" onClick={() => onSend("I haven’t chosen a system yet. Can you help me work out what would count?")} />
+                <QuickPrompt label="I have an idea or draft to discuss" onClick={() => onSend("I’ve started working on it. Can I show you what I have?")} />
               </div>
               <button type="button" onClick={() => onSelectSystem(SYSTEMS_SOCIETY_DEMO.sampleSystem)} className="mt-3 text-xs font-semibold text-[#155f64] underline decoration-[#155f64]/25 underline-offset-4">Or use the New York City subway as a guided sample</button>
             </div>
           ) : null}
-          {isSending ? <div className="ml-12 flex items-center gap-2 text-xs text-[#777770]"><span className="h-2 w-2 animate-pulse rounded-full bg-[#155f64]" />AI_thena is considering your reasoning…</div> : null}
+          {isSending ? (
+            <div className="ml-11" role="status" aria-label="AI_thena is responding">
+              <TypingIndicator />
+            </div>
+          ) : null}
         </div>
 
         <div className="border-t border-black/7 bg-white p-4 sm:p-6">
@@ -994,7 +999,7 @@ function LearnerView({
               }}
               rows={3}
               disabled={!ready || isSending}
-              placeholder={connectionMode === "worked" ? "This is a pre-recorded example. Start a live run to interact." : ready ? "Explain what you think. AI_thena will respond to your reasoning…" : connectionMode === "unavailable" ? "Live AI is unavailable" : "Preparing the conversation…"}
+              placeholder={connectionMode === "worked" ? "This is a pre-recorded example. Start a live run to interact." : ready ? "Ask a question, share an idea, or paste something you want to discuss…" : connectionMode === "unavailable" ? "Live AI is unavailable" : "Preparing the conversation…"}
               className="w-full resize-none bg-transparent px-3 py-2 text-[15px] leading-6 outline-none placeholder:text-[#9a9a93] disabled:opacity-50"
             />
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/6 px-2 pt-2">
@@ -1033,15 +1038,14 @@ function ModeBadge({ mode }: { mode: ConnectionMode }) {
 
 function ConversationMessage({ message }: { message: DemoMessage }) {
   const user = message.role === "user";
+  if (!user && !message.content) return null;
   return (
     <div className={`flex gap-3 ${user ? "justify-end" : "justify-start"}`}>
       {!user ? <span className="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#d9ecea] text-xs font-bold text-[#155f64]">A</span> : null}
       <div className={`max-w-[82%] rounded-2xl px-5 py-4 text-[15px] leading-7 ${user ? "rounded-br-sm bg-[#242a29] text-white" : "rounded-bl-sm bg-white text-[#343530] shadow-sm ring-1 ring-black/6"}`}>
-        {message.content ? (
-          <ReactMarkdown components={{ p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>, strong: ({ children }) => <strong className="font-bold">{children}</strong> }}>
-            {message.content}
-          </ReactMarkdown>
-        ) : <span className="inline-block h-4 w-10 animate-pulse rounded-full bg-black/10" />}
+        <ReactMarkdown components={{ p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>, strong: ({ children }) => <strong className="font-bold">{children}</strong> }}>
+          {message.content}
+        </ReactMarkdown>
       </div>
       {user ? <span className="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#e9e2d5] text-xs font-bold text-[#6d5734]">You</span> : null}
     </div>

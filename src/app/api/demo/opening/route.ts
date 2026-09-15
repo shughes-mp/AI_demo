@@ -108,7 +108,7 @@ export async function POST(request: Request) {
         {
           role: "user",
           content:
-            "This is a system-generated kickoff, not learner evidence. Welcome the learner briefly to the Systems & Society assignment-support conversation. State that they do not need to know where to begin or have chosen a system yet. Explain in one sentence that you can help them understand the assignment, learn its concepts and skills, choose or check a system, or discuss work they already created—while leaving the important thinking and writing to them. Then ask the configured routing question. Do not demand an assignment attempt until you know which kind of support they need. Ask only one main question.",
+            "This is a system-generated kickoff, not learner evidence. Welcome the learner briefly to the Systems & Society assignment. In plain, natural language, tell them they do not need to know where to begin or have chosen a system yet. Say that you can help them understand the task, learn the concepts, choose or check a system, or discuss work they have started—but that the important decisions and writing remain theirs. Then ask the configured routing question. Do not demand an assignment attempt until you know what help they need. Avoid institutional or promotional language. Ask only one main question.",
         },
       ],
     });

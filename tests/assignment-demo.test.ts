@@ -163,6 +163,26 @@ test("the live learner start routes foundational needs and keeps demo-only probe
   assert.match(openingRoute, /Do not demand an assignment attempt/);
 });
 
+test("the demo uses the original waiting animation and context-neutral learner language", () => {
+  const component = readFileSync(
+    new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
+    "utf8"
+  );
+  const startRoute = readFileSync(
+    new URL("../src/app/api/demo/start/route.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(component, /import \{ TypingIndicator \}/);
+  assert.match(component, /<TypingIndicator \/>/);
+  assert.doesNotMatch(component, /considering your reasoning/i);
+  assert.match(component, /Ask a question, share an idea, or paste something you want to discuss/);
+  assert.match(component, /I’m new to this\. What exactly do I need to do\?/);
+  assert.match(startRoute, /LEARNER-FACING VOICE AND EXPERIENCE/);
+  assert.match(startRoute, /Do not describe every contribution as "reasoning/);
+  assert.match(startRoute, /thoughtful practitioner with a point of view/);
+});
+
 test("the no-login demo bypasses Clerk while instructor pages remain protected", () => {
   const proxy = readFileSync(
     new URL("../src/proxy.ts", import.meta.url),
