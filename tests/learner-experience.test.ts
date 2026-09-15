@@ -12,6 +12,7 @@ import {
   isHelpRequest,
   normalizeLearnerReflection,
   PRODUCTIVE_STRUGGLE_STEPS,
+  validateLearnerSummary,
 } from "../src/lib/learner-experience.ts";
 import {
   buildContextInstruction,
@@ -108,6 +109,63 @@ test("learner summaries are formative, evidence-limited, and explicitly contesta
   assert.match(prompt, /may be incomplete or inaccurate/i);
   assert.match(prompt, /add a reflection or correction/i);
   assert.match(prompt, /Confuses correlation and cause/);
+});
+
+test("learner summaries reject invented dialogue and remain conservative for brief sessions", () => {
+  const messages = [
+    { role: "user", content: "Help me understand the assignment requirements." },
+    { role: "assistant", content: "The assignment has four steps. Which feels least clear?" },
+    { role: "user", content: "I am considering a hospital emergency department." },
+    { role: "assistant", content: "What makes that system complex and social?" },
+  ];
+  const invented = `Student: It has a culture of workarounds.
+Tutor: Excellent analysis.
+
+## Topics covered
+- Hospital culture
+
+## Where your reasoning became clearer
+- You mastered emergence.
+
+## What may be worth revisiting
+- Nothing
+
+## A question to carry forward
+What next?
+
+## About this summary
+This AI-generated summary may be incomplete or inaccurate; you can add a reflection or correction before your instructor reviews it.`;
+  const validated = validateLearnerSummary(invented, messages, []);
+
+  assert.doesNotMatch(validated, /culture of workarounds|mastered emergence/i);
+  assert.match(validated, /does not yet provide enough validated evidence/i);
+  assert.match(validated, /What makes that system complex and social\?/i);
+});
+
+test("well-formed longer learner summaries retain their validated structure", () => {
+  const messages = [
+    { role: "user", content: "First attempt" },
+    { role: "assistant", content: "What changed?" },
+    { role: "user", content: "Revision" },
+    { role: "assistant", content: "Why?" },
+    { role: "user", content: "Because the interaction matters." },
+  ];
+  const generated = `## Topics covered
+- Interactions
+
+## Where your reasoning became clearer
+- The learner revised the explanation.
+
+## What may be worth revisiting
+- Evidence
+
+## A question to carry forward
+What evidence supports the interaction?
+
+## About this summary
+This AI-generated summary may be incomplete or inaccurate; you can add a reflection or correction before your instructor reviews it.`;
+
+  assert.equal(validateLearnerSummary(generated, messages, []), generated);
 });
 
 test("learner reflection normalization preserves corrections and limits stored text", () => {

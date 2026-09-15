@@ -4,7 +4,10 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 import { MODEL_PRIMARY } from "@/lib/models";
 import { matchesLearnerCapability } from "@/lib/learner-capability";
-import { buildLearnerSummaryPrompt } from "@/lib/learner-experience";
+import {
+  buildLearnerSummaryPrompt,
+  validateLearnerSummary,
+} from "@/lib/learner-experience";
 
 export async function POST(req: Request) {
   try {
@@ -58,15 +61,15 @@ export async function POST(req: Request) {
 
     // Format transcripts
     const transcript = studentSession.messages
-      .map((m: any) => `${m.role === "user" ? "Student" : "Tutor"}: ${m.content}`)
+      .map((message) => `${message.role === "user" ? "Student" : "Tutor"}: ${message.content}`)
       .join("\n\n");
     const unresolvedMisconceptions = studentSession.misconceptions.filter(
-      (item: any) => !item.resolved || item.persistentlyUnresolved
+      (item) => !item.resolved || item.persistentlyUnresolved
     );
 
     const prompt = buildLearnerSummaryPrompt({
       transcript,
-      unresolvedMisconceptions: unresolvedMisconceptions.map((item: any) => ({
+      unresolvedMisconceptions: unresolvedMisconceptions.map((item) => ({
         topicThread: item.topicThread,
         description: item.description,
       })),
@@ -76,17 +79,25 @@ export async function POST(req: Request) {
       model: anthropic(MODEL_PRIMARY),
       prompt,
     });
+    const validatedSummary = validateLearnerSummary(
+      text,
+      studentSession.messages,
+      unresolvedMisconceptions.map((item) => ({
+        topicThread: item.topicThread,
+        description: item.description,
+      }))
+    );
 
     // Save summary and mark endedAt
     await prisma.studentSession.update({
       where: { id: studentSessionId },
       data: {
-        sessionSummary: text,
+        sessionSummary: validatedSummary,
         endedAt: new Date(),
       },
     });
 
-    return NextResponse.json({ summary: text }, { status: 200 });
+    return NextResponse.json({ summary: validatedSummary }, { status: 200 });
   } catch (error) {
     console.error("End Session Error:", error);
     return NextResponse.json({ error: "Failed to end session", code: "END_FAILED" }, { status: 500 });

@@ -1211,12 +1211,18 @@ function LiveInstructorView({
   const sufficient = snapshot.checkpoints.filter(
     (checkpoint) => checkpoint.status === "evidence_sufficient"
   );
+  const hasAssessableEvidence = (assessment: EvidenceSnapshot["loAssessments"][number]) => {
+    const summary = assessment.evidenceSummary?.toLowerCase() ?? "";
+    return !/no evidence|not reached|no engagement|not observed|insufficient opportunity/.test(summary);
+  };
   const outcomeKey = (value: string) =>
     value.split(/[—–-]/)[0].replace(/[^a-z]/gi, "").toLowerCase();
   const assessmentByOutcome = new Map<string, EvidenceSnapshot["loAssessments"][number]>();
   for (const assessment of snapshot.loAssessments) {
     const key = outcomeKey(assessment.learningOutcome);
-    if (!assessmentByOutcome.has(key)) assessmentByOutcome.set(key, assessment);
+    if (!assessmentByOutcome.has(key) && hasAssessableEvidence(assessment)) {
+      assessmentByOutcome.set(key, assessment);
+    }
   }
   const assessedOutcomes = SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => {
     const key = outcomeKey(outcome.label);

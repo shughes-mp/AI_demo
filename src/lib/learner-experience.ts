@@ -117,6 +117,98 @@ Transcript:
 ${input.transcript}`;
 }
 
+type SummaryMessage = { role: string; content: string };
+
+const SUMMARY_HEADINGS = [
+  "## Topics covered",
+  "## Where your reasoning became clearer",
+  "## What may be worth revisiting",
+  "## A question to carry forward",
+  "## About this summary",
+] as const;
+
+function transcriptTopics(messages: SummaryMessage[]) {
+  const transcript = messages.map((message) => message.content).join(" ").toLowerCase();
+  const topics: string[] = [];
+  if (/assignment|instruction|requirement|rubric|learning outcome|skill/.test(transcript)) {
+    topics.push("The assignment requirements, assessed skills, and an appropriate place to begin");
+  }
+  if (/complex social|complicated|chosen system|candidate system|considering/.test(transcript)) {
+    topics.push("Testing whether a possible system is genuinely complex and social");
+  }
+  if (/micro|meso|macro|agent|attribute|decompos/.test(transcript)) {
+    topics.push("Agents, attributes, interactions, and levels of system analysis");
+  }
+  if (/emergent/.test(transcript)) {
+    topics.push("Emergent properties and how interactions may produce them");
+  }
+  if (/evidence|source|citation|apa|reference/.test(transcript)) {
+    topics.push("Evidence, attribution, and professional presentation requirements");
+  }
+  return topics.slice(0, 4);
+}
+
+function lastPersistedQuestion(messages: SummaryMessage[]) {
+  const assistantText = messages
+    .filter((message) => message.role === "assistant")
+    .map((message) => message.content.replace(/\[[A-Z_]+:[^\]]*\]/g, "").replace(/[*_#]/g, ""))
+    .join("\n");
+  const questions = assistantText.match(/[^\n.!?][^\n?]{5,280}\?/g) ?? [];
+  return questions.at(-1)?.trim() ?? "What is the next decision or explanation you need to make in your own words?";
+}
+
+function conservativeLearnerSummary(
+  messages: SummaryMessage[],
+  unresolvedMisconceptions: Array<{ topicThread: string; description: string }>
+) {
+  const learnerTurns = messages.filter((message) => message.role === "user").length;
+  const topics = transcriptTopics(messages);
+  const revisit = unresolvedMisconceptions.length
+    ? unresolvedMisconceptions
+        .slice(0, 3)
+        .map((item) => `- ${item.description}`)
+        .join("\n")
+    : "- Continue from the last unanswered question before drawing conclusions about understanding or progress.";
+
+  return `## Topics covered
+${(topics.length ? topics : ["The learner's current question and next step"]).map((topic) => `- ${topic}`).join("\n")}
+
+## Where your reasoning became clearer
+- This ${learnerTurns === 1 ? "brief interaction contains one learner contribution" : `conversation contains ${learnerTurns} learner contributions`}; the persisted record does not yet provide enough validated evidence to claim that the learner's reasoning became clearer.
+
+## What may be worth revisiting
+${revisit}
+
+## A question to carry forward
+${lastPersistedQuestion(messages)}
+
+## About this summary
+This AI-generated summary may be incomplete or inaccurate; you can add a reflection or correction before your instructor reviews it.
+
+AI_thena withheld a stronger progress claim because the generated summary did not meet its transcript-validation rules.`;
+}
+
+export function validateLearnerSummary(
+  generated: string,
+  messages: SummaryMessage[],
+  unresolvedMisconceptions: Array<{ topicThread: string; description: string }>
+) {
+  const learnerTurns = messages.filter((message) => message.role === "user").length;
+  const firstHeading = generated.indexOf(SUMMARY_HEADINGS[0]);
+  const prefix = firstHeading >= 0 ? generated.slice(0, firstHeading).trim() : generated.trim();
+  const allHeadingsPresent = SUMMARY_HEADINGS.every(
+    (heading, index) => generated.indexOf(heading) >= 0 &&
+      (index === 0 || generated.indexOf(heading) > generated.indexOf(SUMMARY_HEADINGS[index - 1]))
+  );
+  const inventedDialogue = /(?:^|\n)\s*(?:Student|Learner|Tutor|AI_thena)\s*:/i.test(generated);
+
+  if (learnerTurns < 3 || firstHeading < 0 || prefix || !allHeadingsPresent || inventedDialogue) {
+    return conservativeLearnerSummary(messages, unresolvedMisconceptions);
+  }
+
+  return generated.slice(firstHeading).trim();
+}
+
 export interface LearnerReflectionInput {
   changedThinking: string;
   supportedClaim: string;
