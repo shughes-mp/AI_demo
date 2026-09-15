@@ -184,6 +184,7 @@ export function AssignmentDemo() {
   const [isSending, setIsSending] = useState(false);
   const [supportLevel, setSupportLevel] = useState(1);
   const [transferStart, setTransferStart] = useState<number | null>(null);
+  const [selectedSystem, setSelectedSystem] = useState<string | null>(null);
   const [visitedInstructor, setVisitedInstructor] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [evidenceSnapshot, setEvidenceSnapshot] = useState<EvidenceSnapshot | null>(null);
@@ -266,6 +267,7 @@ export function AssignmentDemo() {
     setIsSending(false);
     setSupportLevel(1);
     setTransferStart(null);
+    setSelectedSystem(null);
     setError(null);
     setEvidenceSnapshot(null);
     setEvidenceError(null);
@@ -288,6 +290,7 @@ export function AssignmentDemo() {
     setConnectionMode("worked");
     setSupportLevel(3);
     setTransferStart(null);
+    setSelectedSystem(SYSTEMS_SOCIETY_DEMO.sampleSystem);
     setError(null);
     setEvidenceSnapshot(null);
     setEvidenceError(null);
@@ -366,7 +369,18 @@ export function AssignmentDemo() {
   function beginReducedSupportCheck() {
     if (transferStart === null) setTransferStart(learnerMessages.length);
     void sendMessage(
-      "I’m ready to test my thinking with less support. Give me a changed New York City subway question that requires #SystemAnalysis, but do not give me the decomposition or the answer."
+      selectedSystem
+        ? `I’m ready to test my thinking with less support. Give me a changed question about ${selectedSystem} that requires me to reapply the most relevant assignment skill, but do not give me the reasoning or answer.`
+        : "I’m ready to test my thinking with less support. Give me a changed complex-social-system example that requires me to reapply the most relevant assignment skill, but do not give me the reasoning or answer."
+    );
+  }
+
+  function chooseSystem(system: string) {
+    const clean = system.trim();
+    if (!clean) return;
+    setSelectedSystem(clean);
+    void sendMessage(
+      `I am considering ${clean} for the assignment. Before we assume it is suitable, help me test whether it is genuinely both complex and social. Ask me to make the case rather than deciding for me.`
     );
   }
 
@@ -430,6 +444,7 @@ export function AssignmentDemo() {
     setIsSending(false);
     setSupportLevel(1);
     setTransferStart(null);
+    setSelectedSystem(null);
     setVisitedInstructor(false);
     setError(null);
     setEvidenceSnapshot(null);
@@ -488,6 +503,7 @@ export function AssignmentDemo() {
                 error={error}
                 learnerMessageCount={learnerMessages.length}
                 transferStarted={transferStart !== null}
+                selectedSystem={selectedSystem}
                 onInput={setInput}
                 onSend={sendMessage}
                 onMoreSupport={() => {
@@ -497,6 +513,7 @@ export function AssignmentDemo() {
                   );
                 }}
                 onReducedSupport={beginReducedSupportCheck}
+                onSelectSystem={chooseSystem}
                 onInstructor={() => void openInstructor()}
                 onAssignment={() => setAssignmentOpen(true)}
                 onWorked={loadWorkedExample}
@@ -543,7 +560,7 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
             Imagine you are a learner taking <strong className="font-semibold text-[#252521]">Systems &amp; Society</strong>. You are completing your first assignment: choose a complex social system from the real world and analyse it.
           </p>
           <p className="mt-4 max-w-2xl text-[18px] leading-8 text-[#62625c]">
-            In this demonstration, the learner has chosen the <strong className="font-semibold text-[#252521]">New York City subway</strong>. Use AI_thena to understand the assignment, make sense of the skill you need to apply, and begin developing your own analysis.
+            Begin wherever a learner genuinely might: make sense of the instructions, understand the concepts and skills, choose or check a system, or discuss an idea already in progress. You can choose any suitable system—or use the New York City subway as an optional sample.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
@@ -576,8 +593,8 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
           <dl className="grid grid-cols-2 gap-px bg-white/10">
             <ScenarioItem number="01" label="Course" value="Systems & Society" />
             <ScenarioItem number="02" label="Assignment" value="Analyse a complex social system" />
-            <ScenarioItem number="03" label="Chosen system" value="New York City subway" />
-            <ScenarioItem number="04" label="Skill in focus" value="#SystemAnalysis" />
+            <ScenarioItem number="03" label="System" value="The learner chooses" />
+            <ScenarioItem number="04" label="Assessed skills" value="Four learning outcomes + #Audience" />
           </dl>
           <div className="bg-[#1d2221] p-7 sm:p-8">
             <p className="flex gap-3 text-sm leading-6 text-white/76">
@@ -597,6 +614,14 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
 }
 
 function AssignmentBrief({ onClose }: { onClose: () => void }) {
+  const [activeOutcomeId, setActiveOutcomeId] = useState<string>(
+    SYSTEMS_SOCIETY_DEMO.outcomes[0].id
+  );
+  const activeOutcome =
+    SYSTEMS_SOCIETY_DEMO.outcomes.find(
+      (outcome) => outcome.id === activeOutcomeId
+    ) ?? SYSTEMS_SOCIETY_DEMO.outcomes[0];
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
       <button
@@ -613,55 +638,95 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
       >
         <header className="sticky top-0 z-10 flex items-start justify-between gap-6 border-b border-black/8 bg-[#fbfaf7]/95 px-6 py-5 backdrop-blur sm:px-9">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.13em] text-[#155f64]">Relevant assignment instructions</p>
-            <h2 id="assignment-brief-title" className="mt-2 font-serif text-3xl tracking-[-0.025em]">Assignment 1 · Systems &amp; Society</h2>
+            <p className="text-[11px] font-bold uppercase tracking-[0.13em] text-[#155f64]">Full assignment · source of truth</p>
+            <h2 id="assignment-brief-title" className="mt-2 font-serif text-3xl tracking-[-0.025em]">Assignment 1 · Complex social-system analysis</h2>
           </div>
           <button type="button" onClick={onClose} className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#eeece6] text-xl text-[#55554f] hover:bg-[#e4e1d8]" aria-label="Close">×</button>
         </header>
 
-        <div className="grid gap-8 px-6 py-7 sm:px-9 sm:py-9 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
+        <div className="grid gap-8 px-6 py-7 sm:px-9 sm:py-9 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
           <div>
             <div className="rounded-2xl bg-[#e9f3f1] p-5 text-sm leading-6 text-[#3f504d]">
-              <strong className="block text-[#155f64]">What this demo includes</strong>
-              The complete assignment assesses several outcomes. This demonstration deliberately zooms in on the part concerned with <strong>#SystemAnalysis</strong>, so you can judge whether the AI’s questions and boundaries are appropriate for that work.
+              <strong className="block text-[#155f64]">Goal</strong>
+              Individually select a real-world complex social system that was not discussed in class, analyse it using reliable resources and the Unit 1 concepts, explain an emergent property, and present the work as a carefully edited APA paper.
             </div>
 
             <section className="mt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">Overall assignment</p>
-              <p className="mt-3 text-[15px] leading-7 text-[#484943]">Individually select a complex social system that was not discussed in class. Introduce the system for an unfamiliar audience, analyse it using reliable resources, and present the work in an 800–1,000 word paper using APA style.</p>
+              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">What you need to do</p>
+              <div className="mt-4 space-y-3">
+                {SYSTEMS_SOCIETY_DEMO.steps.map((step) => (
+                  <article key={step.number} className="grid grid-cols-[34px_1fr] gap-4 rounded-2xl border border-black/7 bg-white/70 p-4">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#155f64] text-xs font-bold text-white">{step.number}</span>
+                    <div>
+                      <h3 className="text-sm font-bold text-[#2d2e2a]">{step.title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-[#66665f]">{step.summary}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </section>
 
             <section className="mt-7 border-t border-black/8 pt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">The step demonstrated here</p>
-              <h3 className="mt-3 text-lg font-bold">Break down the complex social system using #SystemAnalysis</h3>
-              <ol className="mt-4 space-y-3 text-sm leading-6 text-[#5f6059]">
-                <li className="flex gap-3"><span className="font-bold text-[#155f64]">1</span><span>Choose an explanatory question that determines which parts of the system matter.</span></li>
-                <li className="flex gap-3"><span className="font-bold text-[#155f64]">2</span><span>Conduct a multilevel analysis at the micro, meso, and macro levels.</span></li>
-                <li className="flex gap-3"><span className="font-bold text-[#155f64]">3</span><span>Within each level, identify relevant agents, agent attributes, and interactions.</span></li>
-                <li className="flex gap-3"><span className="font-bold text-[#155f64]">4</span><span>Explain how the different levels affect one another—not merely what belongs in each list.</span></li>
-                <li className="flex gap-3"><span className="font-bold text-[#155f64]">5</span><span>Explain why the chosen decomposition helps address the explanatory question, using reliable evidence where needed.</span></li>
-              </ol>
+              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">Assessed learning outcomes · select one to see its 0–5 rubric</p>
+              <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Learning outcome rubrics">
+                {SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => (
+                  <button
+                    key={outcome.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeOutcome.id === outcome.id}
+                    onClick={() => setActiveOutcomeId(outcome.id)}
+                    className={`rounded-full px-4 py-2 text-xs font-bold transition ${activeOutcome.id === outcome.id ? "bg-[#155f64] text-white" : "bg-[#efede7] text-[#585953] hover:bg-[#e5e2da]"}`}
+                  >
+                    {outcome.label}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-4 rounded-2xl bg-[#242a29] p-5 text-white" role="tabpanel">
+                <h3 className="text-sm font-bold text-[#9ed2cf]">{activeOutcome.label}</h3>
+                <p className="mt-2 text-sm leading-6 text-white/72">{activeOutcome.short}</p>
+                <ol className="mt-5 space-y-3 border-t border-white/10 pt-5">
+                  {activeOutcome.rubric.map((descriptor, band) => (
+                    <li key={`${activeOutcome.id}-${band}`} className="grid grid-cols-[26px_1fr] gap-3 text-xs leading-5 text-white/68">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bold text-white">{band}</span>
+                      <span>{descriptor}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div className="mt-4 rounded-2xl border border-[#155f64]/14 bg-[#edf6f4] p-4 text-sm leading-6 text-[#4c5f5c]">
+                <strong className="text-[#155f64]">Also required: {SYSTEMS_SOCIETY_DEMO.additionalSkill.label}</strong>
+                <span className="mt-1 block">{SYSTEMS_SOCIETY_DEMO.additionalSkill.short}</span>
+              </div>
             </section>
 
             <section className="mt-7 border-t border-black/8 pt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">What appropriate AI support looks like</p>
-              <p className="mt-3 text-sm leading-6 text-[#5f6059]">AI_thena may clarify the instructions, ask the learner to make an attempt, question their choices, offer a hint, critique learner-authored material, or model one analogous reasoning move. It should not produce a substantial section of the assignment for the learner.</p>
+              <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#81745f]">APA resources named in the assignment</p>
+              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+                {SYSTEMS_SOCIETY_DEMO.apaResources.map((resource) => (
+                  <li key={resource.url}>
+                    <a href={resource.url} target="_blank" rel="noreferrer" className="flex h-full items-center justify-between gap-3 rounded-xl border border-black/8 bg-white/70 px-4 py-3 text-xs font-bold text-[#155f64] transition hover:border-[#155f64]/30 hover:bg-white">
+                      {resource.label}<span aria-hidden>↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </section>
           </div>
 
-          <aside className="self-start rounded-[22px] bg-[#242a29] p-6 text-white lg:sticky lg:top-28">
-            <p className="text-xs font-bold text-[#9ed2cf]">#SystemAnalysis</p>
-            <p className="mt-3 text-sm leading-6 text-white/72">{SYSTEMS_SOCIETY_DEMO.outcome.short}</p>
-            <div className="mt-6 border-t border-white/10 pt-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/42">0–5 rubric</p>
-              <ol className="mt-4 space-y-3">
-                {SYSTEMS_SOCIETY_DEMO.outcome.rubric.map((descriptor, band) => (
-                  <li key={descriptor} className="grid grid-cols-[24px_1fr] gap-3 text-xs leading-5 text-white/66">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bold text-white">{band}</span>
-                    <span>{descriptor}</span>
-                  </li>
-                ))}
-              </ol>
+          <aside className="self-start rounded-[22px] bg-[#f0eee8] p-6 lg:sticky lg:top-28">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#81745f]">Submission checklist</p>
+            <ul className="mt-5 space-y-3">
+              {SYSTEMS_SOCIETY_DEMO.submissionRequirements.map((requirement) => (
+                <li key={requirement} className="flex gap-3 text-xs leading-5 text-[#5f6059]">
+                  <span aria-hidden className="mt-0.5 text-[#155f64]">✓</span>
+                  <span>{requirement}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 border-t border-black/8 pt-5">
+              <p className="text-xs font-bold text-[#2d2e2a]">How AI_thena may help</p>
+              <p className="mt-2 text-xs leading-5 text-[#696963]">It can clarify instructions, explain concepts with other examples, help test a system choice, question reasoning, or critique learner-authored work. It will not produce a submission-ready section.</p>
             </div>
           </aside>
         </div>
@@ -737,10 +802,12 @@ function LearnerView({
   error,
   learnerMessageCount,
   transferStarted,
+  selectedSystem,
   onInput,
   onSend,
   onMoreSupport,
   onReducedSupport,
+  onSelectSystem,
   onInstructor,
   onAssignment,
   onWorked,
@@ -752,35 +819,88 @@ function LearnerView({
   error: string | null;
   learnerMessageCount: number;
   transferStarted: boolean;
+  selectedSystem: string | null;
   onInput: (value: string) => void;
   onSend: (value: string) => void;
   onMoreSupport: () => void;
   onReducedSupport: () => void;
+  onSelectSystem: (system: string) => void;
   onInstructor: () => void;
   onAssignment: () => void;
   onWorked: () => void;
 }) {
   const ready = connectionMode === "live";
+  const [systemDraft, setSystemDraft] = useState("");
+  const [editingSystem, setEditingSystem] = useState(false);
+  const currentStage = transferStarted
+    ? "Reapplying with less support"
+    : learnerMessageCount === 0
+      ? "Getting oriented"
+      : selectedSystem
+        ? "Developing your analysis"
+        : "Understanding the task and choosing a system";
+
+  function submitSystem() {
+    const clean = systemDraft.trim();
+    if (!clean) return;
+    onSelectSystem(clean);
+    setSystemDraft("");
+    setEditingSystem(false);
+  }
+
   return (
-    <div className="mx-auto grid max-w-[1220px] gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-      <aside className="self-start rounded-[24px] bg-white/64 p-6 shadow-[0_20px_60px_rgba(43,44,39,0.06)] ring-1 ring-black/6 lg:sticky lg:top-6">
+    <div className="mx-auto grid max-w-[1260px] gap-6 lg:grid-cols-[350px_minmax(0,1fr)]">
+      <aside className="self-start overflow-hidden rounded-[24px] bg-white/72 shadow-[0_20px_60px_rgba(43,44,39,0.06)] ring-1 ring-black/6 lg:sticky lg:top-6">
+        <div className="p-6">
         <span className="inline-flex rounded-full bg-[#d9ecea] px-3 py-1.5 text-[11px] font-bold text-[#155f64]">You are the learner</span>
-        <h2 className="mt-5 font-serif text-[28px] leading-tight tracking-[-0.025em]">Your assignment, at a glance</h2>
-        <dl className="mt-6 space-y-4 text-sm">
-          <div><dt className="text-xs font-semibold text-[#85857e]">Course</dt><dd className="mt-1 font-semibold">{SYSTEMS_SOCIETY_DEMO.course}</dd></div>
-          <div><dt className="text-xs font-semibold text-[#85857e]">Chosen system</dt><dd className="mt-1 font-semibold">{SYSTEMS_SOCIETY_DEMO.system}</dd></div>
-          <div><dt className="text-xs font-semibold text-[#85857e]">Skill in focus</dt><dd className="mt-1 font-semibold text-[#155f64]">#SystemAnalysis</dd></div>
-        </dl>
-        <div className="mt-6 rounded-2xl bg-[#f0eee8] p-4 text-sm leading-6 text-[#5d5d57]">
-          <strong className="block text-[#2c2d29]">What you are trying to do</strong>
-          Break the subway into relevant parts and levels, explain how they connect, and justify why that view helps answer a question.
+        <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.13em] text-[#8b8b84]">Assignment companion</p>
+        <h2 className="mt-2 font-serif text-[27px] leading-tight tracking-[-0.025em]">Analyse a complex social system</h2>
+        <p className="mt-2 text-xs font-semibold text-[#777770]">{SYSTEMS_SOCIETY_DEMO.course} · Assignment 1</p>
+
+        <div className="mt-5 rounded-2xl bg-[#f0eee8] p-4">
+          <p className="text-[10px] font-bold uppercase tracking-[0.11em] text-[#89847a]">Current stage</p>
+          <p className="mt-1 text-sm font-bold text-[#2d2e2a]">{currentStage}</p>
+          <div className="mt-4 border-t border-black/7 pt-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.11em] text-[#89847a]">Your system</p>
+            <p className={`mt-1 text-sm font-bold ${selectedSystem ? "text-[#2d2e2a]" : "text-[#777770]"}`}>{selectedSystem || "Not selected yet"}</p>
+            {ready ? (
+              <button type="button" onClick={() => setEditingSystem((value) => !value)} className="mt-2 text-xs font-bold text-[#155f64] underline decoration-[#155f64]/25 underline-offset-4">
+                {selectedSystem ? "Change or check it" : "Add or check a system"}
+              </button>
+            ) : null}
+            {editingSystem ? (
+              <form onSubmit={(event) => { event.preventDefault(); submitSystem(); }} className="mt-3 flex gap-2">
+                <input value={systemDraft} onChange={(event) => setSystemDraft(event.target.value)} placeholder="e.g. a hospital" className="min-w-0 flex-1 rounded-lg border border-black/12 bg-white px-3 py-2 text-xs outline-none focus:border-[#155f64]/45" />
+                <button type="submit" disabled={!systemDraft.trim()} className="rounded-lg bg-[#155f64] px-3 py-2 text-xs font-bold text-white disabled:opacity-40">Discuss</button>
+              </form>
+            ) : null}
+          </div>
         </div>
-        <button type="button" onClick={onAssignment} className="mt-5 flex w-full items-center justify-between rounded-xl border border-[#155f64]/15 bg-[#edf6f4] px-4 py-3 text-left text-xs font-bold text-[#155f64] transition hover:border-[#155f64]/30">
-          View assignment instructions <span aria-hidden>↗</span>
+
+        <p className="mt-5 text-sm leading-6 text-[#5d5d57]">Choose and justify a complex social system, analyse its levels and interactions, explain an emergent property, and support the reasoning with evidence.</p>
+        <button type="button" onClick={onAssignment} className="mt-5 flex w-full items-center justify-between rounded-xl bg-[#155f64] px-4 py-3.5 text-left text-xs font-bold text-white shadow-[0_10px_24px_rgba(21,95,100,0.16)] transition hover:bg-[#104f53]">
+          Open the full assignment <span aria-hidden>↗</span>
         </button>
-        <details className="mt-5 group">
-          <summary className="cursor-pointer list-none text-sm font-bold text-[#155f64]">Plain-language definitions <span className="float-right transition group-open:rotate-45">+</span></summary>
-          <div className="mt-4 space-y-4 border-t border-black/8 pt-4">
+        </div>
+
+        <details className="group border-t border-black/7 px-6 py-4">
+          <summary className="cursor-pointer list-none text-sm font-bold text-[#155f64]">Skills and success criteria <span className="float-right transition group-open:rotate-45">+</span></summary>
+          <div className="mt-4 space-y-4 border-t border-black/7 pt-4">
+            {SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => (
+              <div key={outcome.id}>
+                <p className="text-xs font-bold text-[#2d2e2a]">{outcome.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[#6d6d66]">{outcome.short}</p>
+              </div>
+            ))}
+            <div>
+              <p className="text-xs font-bold text-[#2d2e2a]">{SYSTEMS_SOCIETY_DEMO.additionalSkill.label} · required</p>
+              <p className="mt-1 text-xs leading-5 text-[#6d6d66]">{SYSTEMS_SOCIETY_DEMO.additionalSkill.short}</p>
+            </div>
+          </div>
+        </details>
+        <details className="group border-t border-black/7 px-6 py-4">
+          <summary className="cursor-pointer list-none text-sm font-bold text-[#155f64]">Concepts you may need <span className="float-right transition group-open:rotate-45">+</span></summary>
+          <div className="mt-4 space-y-4 border-t border-black/7 pt-4">
             {SYSTEMS_SOCIETY_DEMO.vocabulary.map((item) => (
               <div key={item.term}>
                 <p className="text-xs font-bold">{item.term}</p>
@@ -788,6 +908,14 @@ function LearnerView({
               </div>
             ))}
           </div>
+        </details>
+        <details className="group border-t border-black/7 px-6 py-4">
+          <summary className="cursor-pointer list-none text-sm font-bold text-[#155f64]">Submission requirements <span className="float-right transition group-open:rotate-45">+</span></summary>
+          <ul className="mt-4 space-y-2 border-t border-black/7 pt-4">
+            {SYSTEMS_SOCIETY_DEMO.assignment.constraints.map((constraint) => (
+              <li key={constraint} className="flex gap-2 text-xs leading-5 text-[#6d6d66]"><span aria-hidden className="text-[#155f64]">✓</span>{constraint}</li>
+            ))}
+          </ul>
         </details>
       </aside>
 
@@ -820,12 +948,14 @@ function LearnerView({
           {messages.map((message) => <ConversationMessage key={message.id} message={message} />)}
           {learnerMessageCount === 0 && ready ? (
             <div className="ml-12 max-w-2xl pt-1">
-              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#8b8b84]">Start however you prefer</p>
-              <div className="flex flex-wrap gap-2">
-                <QuickPrompt label="Share the example learner’s first attempt" onClick={() => onSend(SYSTEMS_SOCIETY_DEMO.initialAttempt)} />
-                <QuickPrompt label="Ask what #SystemAnalysis means" onClick={() => onSend("I’m not sure what #SystemAnalysis means or what I need to do first.")} />
-                <QuickPrompt label="Test the assignment boundary" onClick={() => onSend("Write the system analysis section of the assignment for me.")} />
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#8b8b84]">Where would you like to begin?</p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <QuickPrompt label="Help me understand the assignment" onClick={() => onSend("I’m new to this assignment. Help me understand what I need to produce, the main steps, and the important constraints. Then check what I have understood.")} />
+                <QuickPrompt label="Explain the key concepts and skills" onClick={() => onSend("I’m not yet confident about the concepts and skills this assignment requires. Help me identify what I need to understand, then start with the most foundational distinction.")} />
+                <QuickPrompt label="Help me choose or check a system" onClick={() => onSend("I need help choosing—or checking—a suitable complex social system. Ask about my interests and help me test my own candidates without choosing for me.")} />
+                <QuickPrompt label="I have an idea or draft to discuss" onClick={() => onSend("I already have an idea or some work in progress. Ask me to share it, then help me evaluate it against the relevant assignment criteria.")} />
               </div>
+              <button type="button" onClick={() => onSelectSystem(SYSTEMS_SOCIETY_DEMO.sampleSystem)} className="mt-3 text-xs font-semibold text-[#155f64] underline decoration-[#155f64]/25 underline-offset-4">Or use the New York City subway as a guided sample</button>
             </div>
           ) : null}
           {isSending ? <div className="ml-12 flex items-center gap-2 text-xs text-[#777770]"><span className="h-2 w-2 animate-pulse rounded-full bg-[#155f64]" />AI_thena is considering your reasoning…</div> : null}
@@ -900,7 +1030,7 @@ function ConversationMessage({ message }: { message: DemoMessage }) {
 }
 
 function QuickPrompt({ label, onClick }: { label: string; onClick: () => void }) {
-  return <button type="button" onClick={onClick} className="rounded-full border border-[#155f64]/18 bg-white px-4 py-2 text-left text-xs font-semibold text-[#155f64] shadow-sm transition hover:-translate-y-0.5 hover:border-[#155f64]/35">{label}</button>;
+  return <button type="button" onClick={onClick} className="min-h-12 rounded-xl border border-[#155f64]/18 bg-white px-4 py-3 text-left text-xs font-semibold leading-5 text-[#155f64] shadow-sm transition hover:-translate-y-0.5 hover:border-[#155f64]/35 hover:bg-[#f7fbfa]">{label}</button>;
 }
 
 function InstructorView({
@@ -1081,7 +1211,18 @@ function LiveInstructorView({
   const sufficient = snapshot.checkpoints.filter(
     (checkpoint) => checkpoint.status === "evidence_sufficient"
   );
-  const latestAssessment = snapshot.loAssessments[0] ?? null;
+  const outcomeKey = (value: string) =>
+    value.split(/[—–-]/)[0].replace(/[^a-z]/gi, "").toLowerCase();
+  const assessmentByOutcome = new Map<string, EvidenceSnapshot["loAssessments"][number]>();
+  for (const assessment of snapshot.loAssessments) {
+    const key = outcomeKey(assessment.learningOutcome);
+    if (!assessmentByOutcome.has(key)) assessmentByOutcome.set(key, assessment);
+  }
+  const assessedOutcomes = SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => {
+    const key = outcomeKey(outcome.label);
+    return { outcome, assessment: assessmentByOutcome.get(key) ?? null };
+  });
+  const latestAssessment = assessedOutcomes.find((item) => item.assessment)?.assessment ?? null;
   const evidenceItems = snapshot.teachingBrief?.evidenceMap?.items ?? [];
   const teachingMoves = snapshot.teachingBrief?.suggestedTeachingMoves ?? [];
   const firstOpenCheckpoint = snapshot.checkpoints.find(
@@ -1122,6 +1263,22 @@ function LiveInstructorView({
           tone="grey"
           text="This run cannot establish independent performance, durable transfer, or that AI caused any improvement. Those require later, reduced-support evidence and instructor judgment."
         />
+      </section>
+
+      <section className="rounded-[24px] bg-white/72 p-6 ring-1 ring-black/6 sm:p-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div><p className="text-xs font-bold uppercase tracking-[0.11em] text-[#155f64]">Learning-outcome coverage</p><h2 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Assess only what the conversation evidenced</h2></div>
+          <p className="max-w-sm text-xs leading-5 text-[#777770]">An outcome remains unassessed when the learner has not yet produced relevant evidence.</p>
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {assessedOutcomes.map(({ outcome, assessment }) => (
+            <article key={outcome.id} className={`rounded-2xl p-4 ring-1 ${assessment ? "bg-[#edf6f4] ring-[#155f64]/15" : "bg-[#f3f1eb] ring-black/5"}`}>
+              <p className="text-xs font-bold text-[#155f64]">{outcome.label}</p>
+              <p className="mt-2 text-sm font-bold text-[#343530]">{assessment ? humanizeStatus(assessment.status) : "Not assessed"}</p>
+              <p className="mt-2 text-xs leading-5 text-[#6d6d66]">{assessment?.evidenceSummary || "No relevant learner evidence was produced in this run."}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="rounded-[26px] bg-white p-6 shadow-[0_22px_65px_rgba(40,42,36,0.07)] ring-1 ring-black/6 sm:p-8">
@@ -1239,6 +1396,18 @@ function ReviewerView({ onInstructor }: { onInstructor: () => void }) {
         <span className="inline-flex rounded-full bg-[#e7dfd0] px-3 py-1.5 text-[11px] font-bold text-[#745b33]">You are back in your colleague role</span>
         <h1 className="mx-auto mt-5 max-w-3xl font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.04em]">Is this a credible way to support learning and inform teaching?</h1>
         <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-[#696961]">Rate what this experience actually demonstrated. A score of 5 should mean the dimension is convincingly realised—not simply that the idea is promising.</p>
+      </section>
+
+      <section className="mt-8 rounded-[24px] bg-[#242a29] p-6 text-white sm:p-7">
+        <div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+          <div><p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#9ed2cf]">Optional stress tests</p><h2 className="mt-2 font-serif text-2xl tracking-[-0.02em]">Probe the product—not the learner</h2></div>
+          <ul className="grid gap-2 text-xs leading-5 text-white/68 sm:grid-cols-2">
+            <li>Ask it to explain the complete instructions or a rubric distinction.</li>
+            <li>Propose a system that may be complicated but not genuinely social.</li>
+            <li>Ask it to write a submission-ready section and inspect the redirection.</li>
+            <li>Paste a weak learner-authored idea and see whether the critique preserves ownership.</li>
+          </ul>
+        </div>
       </section>
 
       <section className="mt-10 space-y-3">

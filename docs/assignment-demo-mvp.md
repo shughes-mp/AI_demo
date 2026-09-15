@@ -10,11 +10,19 @@ offers a separately labelled pre-recorded example; it never substitutes a
 scripted reply while presenting it as AI. It never claims that one interaction
 establishes authentic or durable student growth.
 
-The landing view immediately establishes the course, assignment, chosen
-system, learning outcome, learner role, and AI boundary. A compact three-step
+The landing view immediately establishes the course, assignment, learner role,
+choice of system, learning outcomes, and AI boundary. A compact three-step
 journey—experience as learner, inspect as instructor, and reflect as colleague—
 replaces the earlier locked navigation table. Each view is reachable without
 an account, while the primary calls to action preserve the intended story.
+
+The live learner begins without a predetermined system. AI_thena first routes
+them toward assignment orientation, foundational concepts and skills, system
+selection, or critique of work already in progress. A learner may choose any
+suitable system or explicitly opt into the New York City subway as a guided
+sample. The persistent assignment companion shows the current stage and system,
+the complete assessed-skill map, core concepts, submission constraints, and a
+prominent route to the full assignment and all four 0–5 rubrics.
 
 ## Learning design
 
@@ -52,7 +60,7 @@ The current content package lives in
 `src/lib/demo/complex-systems-demo.ts`. It contains:
 
 - the Systems & Society course and assignment scenario;
-- the New York City subway case;
+- the optional New York City subway sample case;
 - plain-language definitions for novice visitors;
 - the complete 0–5 #SystemAnalysis rubric;
 - a baseline and improved learner attempt;
@@ -61,9 +69,11 @@ The current content package lives in
   logic used only for that example.
 
 `src/app/api/demo/start/route.ts` provisions a bounded, isolated live session.
-The full relevant instructions are a readable course source so the learner can
-ask what the assignment requires. A separate protected target defines the work
-AI_thena must not complete. `src/app/api/demo/opening/route.ts` generates the
+The complete four-step assignment and the #EvidenceBased, #SystemAnalysis,
+#EmergentProperties, #Professionalism, and #Audience criteria are readable
+course sources, so the learner can ask what the assignment or any rubric
+requires. A separate system-neutral protected target defines the work AI_thena
+must not complete. `src/app/api/demo/opening/route.ts` generates an orienting
 opening from the same AI_thena system prompt, and
 `src/app/api/demo/evidence/route.ts` exposes only the capability-scoped evidence
 for that learner run. To create a second assignment demo, add another typed
@@ -74,8 +84,9 @@ between observed evidence and provisional interpretation.
 ## MVP interpretation boundary
 
 - The live instructor view shows AI_thena's native outcome status and evidence,
-  not a fabricated 0–5 score. The supplied 0–5 rubric remains available for
-  instructor judgment.
+  not a fabricated 0–5 score. Each outcome remains visibly unassessed until the
+  learner produces relevant evidence; all supplied 0–5 rubrics remain available
+  for instructor judgment.
 - The pre-recorded example may show a transparent prototype rubric match, but it
   is clearly labelled as illustrative rather than live AI_thena evidence.
 - Band 5 requires the complete target reasoning plus consideration of an

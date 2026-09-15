@@ -33,22 +33,87 @@ export const SYSTEMS_SOCIETY_DEMO = {
   id: "systems-society-system-analysis-demo",
   course: "Systems & Society",
   title: "Assignment 1 · Analyse a complex social system",
+  sampleSystem: "New York City subway",
+  // Retained for the pre-recorded example and prototype evidence-band helpers.
   system: "New York City subway",
   assignment: {
     goal:
-      "Select a real-world complex social system and analyse it by breaking it into meaningful parts and levels.",
+      "Select a real-world complex social system and explain how its parts, levels, interactions, and emergent properties help us understand it.",
     currentTask:
-      "Apply #SystemAnalysis to the New York City subway: identify relevant agents and attributes at the micro, meso, and macro levels; explain interactions within and across those levels; and justify why this decomposition helps answer a clear question about the system.",
+      "Choose and justify a complex social system, then develop a question-driven analysis using the assignment's learning outcomes and requirements.",
     constraints: [
       "800–1,000 words",
-      "Use micro, meso, and macro levels",
-      "Identify agents, attributes, and interactions",
-      "Explain how the levels affect one another",
       "Use reliable sources and APA style",
+      "Do not use quotations",
+      "Add learning-outcome footnotes",
+      "Include a word count before the references",
     ],
     rubricScale: { minimum: 0, maximum: 5 },
   },
+  steps: [
+    {
+      number: 1,
+      title: "Select and introduce a complex social system",
+      summary:
+        "Choose a system not discussed in class. Explain its purpose, features, and interactions, and justify why it is both complex and social rather than merely complicated.",
+    },
+    {
+      number: 2,
+      title: "Break down the system",
+      summary:
+        "Use #SystemAnalysis and #EvidenceBased to identify relevant agents, attributes, and interactions at micro, meso, and macro levels, including relationships between levels.",
+    },
+    {
+      number: 3,
+      title: "Explain an emergent property",
+      summary:
+        "Identify a meso- or macro-level behavior and explain how interactions among agents and parts give rise to it.",
+    },
+    {
+      number: 4,
+      title: "Present the work professionally",
+      summary:
+        "Use APA style, cite every external source, include only references you used, proofread carefully, and use no quotations.",
+    },
+  ],
+  submissionRequirements: [
+    "800–1,000 words; the title page, footnotes, and reference list are excluded from the count",
+    "APA title page, leveled headings, in-text citations, and reference list",
+    "Every in-text citation must have a matching reference, and the reference list should contain only sources used",
+    "No quotations may be used",
+    "Add footnotes to the strongest learning-outcome applications; name the hashtag and explain the application in two to four sentences",
+    "Include the word count after the main document and before the references",
+    "Use one space between sentences, indent paragraphs, and proofread carefully",
+  ],
+  apaResources: [
+    {
+      label: "Annotated APA student paper",
+      url: "https://apastyle.apa.org/style-grammar-guidelines/paper-format/student-annotated.pdf",
+    },
+    {
+      label: "APA sample papers and literature-review template",
+      url: "https://apastyle.apa.org/style-grammar-guidelines/paper-format/sample-papers",
+    },
+    {
+      label: "Purdue OWL: in-text citations",
+      url: "https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/in_text_citations_the_basics.html",
+    },
+    {
+      label: "Purdue OWL: reference-list rules",
+      url: "https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/reference_list_basic_rules.html",
+    },
+  ],
   vocabulary: [
+    {
+      term: "Complex social system",
+      definition:
+        "A system of interacting people or social actors whose collective behavior cannot be understood by merely listing its parts.",
+    },
+    {
+      term: "Complex vs. complicated",
+      definition:
+        "A complicated system may have many parts but remains relatively predictable; a complex system changes through interactions, feedback, adaptation, and context.",
+    },
     {
       term: "#SystemAnalysis",
       definition:
@@ -69,7 +134,75 @@ export const SYSTEMS_SOCIETY_DEMO = {
       definition:
         "Micro focuses on individuals, meso on groups or organisations, and macro on the wider network, institutions, and rules.",
     },
+    {
+      term: "Emergent property",
+      definition:
+        "A higher-level pattern or behavior produced by interactions among parts of the system, rather than by any one part acting alone.",
+    },
   ],
+  outcomes: [
+    {
+      id: "evidence-based",
+      label: "#EvidenceBased",
+      short:
+        "Identify relevant, reliable evidence and structure it so it supports the analysis clearly and persuasively.",
+      rubric: [
+        "No usable submission.",
+        "Does not identify or use evidence effectively when prompted.",
+        "Shows a developing understanding with major gaps and remains below course requirements.",
+        "Uses evidence only somewhat accurately or presents it confusingly; evaluation of evidence is limited.",
+        "Uses appropriate evidence clearly and accessibly and, when relevant, evaluates its appropriateness or effectiveness.",
+        "Explains and justifies how evidence was selected and used and, when relevant, evaluates its presentation with well-supported reasoning.",
+      ],
+    },
+    {
+      id: "system-analysis",
+      label: "#SystemAnalysis",
+      short:
+        "Decompose a system at appropriate levels and justify how the decomposition addresses the explanatory challenge.",
+      rubric: [
+        "No usable submission.",
+        "Does not deconstruct the system accurately or distinguish an appropriate level of analysis.",
+        "Shows a developing understanding with major gaps and remains below course requirements.",
+        "Deconstructs the system only partly effectively or misses relevant levels or the explanatory purpose.",
+        "Uses plausible components and appropriate levels, explains why the decomposition is useful, and identifies meaningful interactions between levels.",
+        "Justifies why the chosen decomposition best addresses a clear explanatory challenge, explains the significance of the levels and their interactions, and—where useful—compares alternative decompositions.",
+      ],
+    },
+    {
+      id: "emergent-properties",
+      label: "#EmergentProperties",
+      short:
+        "Identify a higher-level property of a complex system and explain how interactions among its parts cause it to emerge.",
+      rubric: [
+        "No usable submission.",
+        "Does not identify an emergent property accurately or fails to apply the concept.",
+        "Shows a developing understanding with major gaps and remains below course requirements.",
+        "Identifies emergence only somewhat accurately or proposes weak or implausible causes.",
+        "Accurately identifies an emergent property and plausible causes and, when relevant, explains its significance.",
+        "Justifies why the property is emergent, explains how specific interactions produce it, and connects its significance or likely conditions to the system's problems or goals.",
+      ],
+    },
+    {
+      id: "professionalism",
+      label: "#Professionalism",
+      short:
+        "Communicate carefully and appropriately by following the assignment's academic, attribution, formatting, and editing conventions.",
+      rubric: [
+        "No usable submission.",
+        "Does not meet professional expectations for tone, attribution, formatting, guidelines, or proofreading.",
+        "Shows a developing understanding with major gaps and remains below course requirements.",
+        "Meets some professional expectations but contains notable problems with conventions, attribution, formatting, or editing.",
+        "Communicates professionally, attributes sources, follows the required conventions, and proofreads effectively.",
+        "Demonstrates nuanced judgment about how to communicate appropriately for the audience, context, and discipline.",
+      ],
+    },
+  ],
+  additionalSkill: {
+    label: "#Audience",
+    short:
+      "Explain the chosen system for a reader who may know very little about it and draw attention to the strongest learning-outcome applications.",
+  },
   outcome: {
     id: "system-analysis",
     label: "#SystemAnalysis",

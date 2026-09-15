@@ -13,6 +13,8 @@ evidence, open `/demo`. Each interactive run provisions an isolated AI_thena
 session and uses the real model, source-grounding, assessment-protection,
 adaptive-support, diagnostic, summary, and teaching-brief paths. The separate
 pre-recorded example remains available for a predictable meeting walkthrough.
+The live learner may begin with the instructions, foundational concepts and
+skills, system selection, or their own work; no system is predetermined.
 If no model key is configured, the demo reports that limitation explicitly
 rather than substituting scripted coaching.
 

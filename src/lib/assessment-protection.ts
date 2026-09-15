@@ -73,5 +73,5 @@ export function assessProtectedRequest(
 }
 
 export function buildProtectedCoachingResponse(): string {
-  return "I can help you reason through the task, but I can’t provide or reproduce a protected assessment answer. Start by stating your current claim and the source evidence you think supports it.\n\n**What is your current reasoning?**";
+  return "I can help you make progress, but I can’t write or reconstruct a protected assessment answer for you. I can clarify what the task requires, explain a concept with a different example, help you test a choice, or critique work you have already created.\n\n**Which part is blocking you, and what is your current reasoning or attempt so far?**";
 }

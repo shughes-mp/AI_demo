@@ -18,10 +18,14 @@ test("the focused demo uses the supplied zero-to-five #SystemAnalysis rubric", (
   assert.equal(SYSTEMS_SOCIETY_DEMO.outcome.rubric.length, 6);
 });
 
-test("the demo scenario is explicit enough for a first-time visitor", () => {
+test("the demo orients a first-time visitor without predetermining their system", () => {
   assert.equal(SYSTEMS_SOCIETY_DEMO.course, "Systems & Society");
-  assert.equal(SYSTEMS_SOCIETY_DEMO.system, "New York City subway");
-  assert.match(SYSTEMS_SOCIETY_DEMO.assignment.currentTask, /micro, meso, and macro/i);
+  assert.equal(SYSTEMS_SOCIETY_DEMO.sampleSystem, "New York City subway");
+  assert.match(SYSTEMS_SOCIETY_DEMO.assignment.currentTask, /choose and justify/i);
+  assert.equal(SYSTEMS_SOCIETY_DEMO.steps.length, 4);
+  assert.equal(SYSTEMS_SOCIETY_DEMO.outcomes.length, 4);
+  assert.equal(SYSTEMS_SOCIETY_DEMO.additionalSkill.label, "#Audience");
+  assert.ok(SYSTEMS_SOCIETY_DEMO.submissionRequirements.length >= 7);
 });
 
 test("the initial attempt is recognised as a list of levels with limited justification", () => {
@@ -122,9 +126,33 @@ test("each live demo run is isolated and separates readable instructions from pr
   assert.match(startRoute, /prisma\.session\.create/);
   assert.doesNotMatch(startRoute, /prisma\.session\.upsert/);
   assert.match(startRoute, /Assignment-1-instructions\.txt/);
+  assert.match(startRoute, /Assignment-1-learning-outcomes-and-rubrics\.txt/);
   assert.match(startRoute, /Assignment-1-protected-target\.txt/);
+  assert.doesNotMatch(startRoute, /has selected the New York City subway/);
+  assert.match(startRoute, /has not necessarily selected a system/);
   assert.match(startRoute, /stance: "mentor"/);
   assert.match(startRoute, /sessionPurpose: "after_class"/);
+});
+
+test("the live learner start routes foundational needs and keeps demo-only probes elsewhere", () => {
+  const component = readFileSync(
+    new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
+    "utf8"
+  );
+  const openingRoute = readFileSync(
+    new URL("../src/app/api/demo/opening/route.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(component, /Help me understand the assignment/);
+  assert.match(component, /Explain the key concepts and skills/);
+  assert.match(component, /Help me choose or check a system/);
+  assert.match(component, /I have an idea or draft to discuss/);
+  assert.match(component, /Open the full assignment/);
+  assert.match(component, /Not selected yet/);
+  assert.doesNotMatch(component, /Share the example learner’s first attempt/);
+  assert.match(component, /Optional stress tests/);
+  assert.match(openingRoute, /Do not demand an assignment attempt/);
 });
 
 test("the no-login demo bypasses Clerk while instructor pages remain protected", () => {
