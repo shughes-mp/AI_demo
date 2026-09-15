@@ -140,6 +140,48 @@ test("each live demo run is isolated and separates readable instructions from pr
   assert.match(startRoute, /has not necessarily selected a system/);
   assert.match(startRoute, /stance: "mentor"/);
   assert.match(startRoute, /sessionPurpose: "after_class"/);
+  assert.match(startRoute, /01-Graf-agent-based-models\.txt/);
+  assert.match(startRoute, /02-Genone-Fost-complex-systems\.txt/);
+  assert.match(startRoute, /03-McAllister-levels-of-analysis\.txt/);
+  assert.match(startRoute, /04-Rizvi-Dubai-nurseries\.txt/);
+  assert.match(startRoute, /05-Thwink-emergent-behavior\.txt/);
+  assert.match(startRoute, /06-TED-Ed-schools-of-fish\.txt/);
+  assert.match(startRoute, /07-Tyson-everyday-emergence\.txt/);
+  assert.match(startRoute, /08-Kurzgesagt-emergence\.txt/);
+  assert.match(startRoute, /09-Systems-Innovation-complex-system\.txt/);
+  assert.match(startRoute, /\.\.\.COURSE_MATERIALS/);
+});
+
+test("grounding metadata stays private while course materials and broader knowledge remain available", () => {
+  const chatRoute = readFileSync(
+    new URL("../src/app/api/chat/route.ts", import.meta.url),
+    "utf8"
+  );
+  const prompt = readFileSync(
+    new URL("../src/lib/system-prompt.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(chatRoute, /const learnerCitationVisible = false/);
+  assert.doesNotMatch(chatRoute, /appendLearnerCitations|ensureKnowledgeScopeCue/);
+  assert.match(chatRoute, /validCitations/);
+  assert.match(chatRoute, /tutorGrounding/);
+  assert.match(prompt, /course materials are important anchors, but they are not the limit/i);
+  assert.match(prompt, /Use broader knowledge when it helps/i);
+  assert.match(prompt, /Passage IDs and filenames are private metadata/i);
+});
+
+test("demo views and the assignment panel participate in browser history", () => {
+  const component = readFileSync(
+    new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(component, /addEventListener\("popstate"/);
+  assert.match(component, /window\.history\.pushState/);
+  assert.match(component, /window\.history\.back\(\)/);
+  assert.match(component, /searchParams\.set\("view"/);
+  assert.match(component, /searchParams\.set\("panel", "assignment"\)/);
 });
 
 test("the live learner start routes foundational needs and keeps demo-only probes elsewhere", () => {

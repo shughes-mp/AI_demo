@@ -8,17 +8,90 @@ import { SYSTEMS_SOCIETY_DEMO } from "@/lib/demo/complex-systems-demo";
 
 export const DEMO_SESSION_NAME_PREFIX = "AI_thena colleague demo ·";
 
-const COURSE_READING = `
-#SystemAnalysis
+const COURSE_MATERIALS = [
+  {
+    filename: "01-Graf-agent-based-models.txt",
+    content: `
+Graf, C. (2021). Overcoming complexity with agent-based models.
+Source: https://towardsdatascience.com/overcoming-complexity-with-agent-based-models-5c4cca37cc61
+Assigned focus: The section titled "The basic ingredients for an agent based model."
 
-Analyze and apply decompositions of systems into constituent parts at multiple levels of analysis.
+Course-use notes: Agent-based models represent a system through agents, their attributes or changing states, the rules that shape their behavior, the environment in which they act, and their interactions. Use this source when helping a learner distinguish an agent from an attribute or reason about how local actions can produce a system-level pattern. Do not attribute claims about unassigned sections to this reading.
+`,
+  },
+  {
+    filename: "02-Genone-Fost-complex-systems.txt",
+    content: `
+Genone, J., and Fost, J. (2017). What are complex systems?
+Source: https://course-resources-uae.minervaproject.com/uploaded_files/production/00008741-3645/what-are-complex-systems---w--header-.pdf
 
-Complex systems can be deconstructed in different ways that define both the scope of the system and the relevant attributes of its components. The key task is to conceptualize the constituent parts in several ways and choose or synthesize the mapping that best addresses the explanatory challenge.
+Course-use notes: Complex systems contain interacting and interdependent parts whose feedback, adaptation, and often nonlinear relationships can produce behavior that is difficult to predict from the parts alone. A merely complicated system can have many parts while remaining comparatively decomposable and predictable. Use this distinction to test whether a proposed system is genuinely complex, not merely large or intricate.
+`,
+  },
+  {
+    filename: "03-McAllister-levels-of-analysis.txt",
+    content: `
+McAllister, K. (2018). Levels of Analysis for Evaluating Complex Systems.
+Source: https://course-resources-uae.minervaproject.com/uploaded_files/production/00008742-2376/levels-of-analysis-for-evaluating-complex-systems--w--header-.pdf
 
-In social systems, analysis can distinguish an individual or micro level, a group or organizational meso level, and a wider system or macro level. An explanation at only one level may be insufficient. A strong multilevel analysis identifies relevant agents, their attributes, interactions within levels, and consequential interactions between levels.
+Course-use notes: A social system can be investigated at biological, individual, social or group, and cultural or societal levels. The appropriate level depends on the explanatory question. Strong analysis may connect mechanisms across more than one level rather than treating levels as a list. Use this source to help the learner decide what belongs at each level and why that level matters.
+`,
+  },
+  {
+    filename: "04-Rizvi-Dubai-nurseries.txt",
+    content: `
+Rizvi, A. (2024, January 4). Nurseries over nannies: Early-learning enrolment on the rise in Dubai. The National.
+Source: https://www.thenationalnews.com/uae/2024/01/04/nurseries-over-nannies-early-learning-enrolment-on-the-rise-in-dubai/
 
-Example of the reasoning move: A hospital trying to reduce spending could first be decomposed by department. That view might reveal communication patterns but hide duplicated education-campaign work inside each department. Decomposing the same hospital by function could expose the duplication. The point is not merely to list parts; it is to justify why a particular decomposition helps answer a clearly stated question and, when useful, compare it with an alternative.
-`;
+Course-use notes: The report describes increased nursery enrolment in Dubai and discusses reasons operating at different levels, including family costs and choices, parents' preferences for trained supervision, children's opportunities for learning and social development, and wider changes in provision and demand. Use it as a practice case for separating individual, family or group, and societal explanations while considering interactions among them.
+`,
+  },
+  {
+    filename: "05-Thwink-emergent-behavior.txt",
+    content: `
+Emergent Behavior. Thwink.org.
+Source: https://www.thwink.org/sustain/glossary/EmergentBehavior.htm
+
+Course-use notes: Emergent behavior is a higher-level pattern produced by interactions among agents in a multi-agent system. It is not simply a property possessed by one agent or a total obtained by adding individual properties. Use this source to test whether the learner has named a defensible emergent property and linked it to plausible interactions.
+`,
+  },
+  {
+    filename: "06-TED-Ed-schools-of-fish.txt",
+    content: `
+TED-Ed. (2016). How do schools of fish swim in harmony?
+Source: https://www.youtube.com/watch?v=dkP8NUwB2io
+
+Course-use notes: Coordinated movement at the level of a school can arise from individual fish responding locally to nearby fish and environmental cues. The school does not require one fish to hold a complete plan for the collective pattern. Use the example to practise identifying agents, interactions, levels, and a group-level emergent behavior.
+`,
+  },
+  {
+    filename: "07-Tyson-everyday-emergence.txt",
+    content: `
+Tyson, P. (2007). Everyday examples of emergence. NOVA ScienceNOW.
+Source: http://www.pbs.org/wgbh/nova/sciencenow/3410/03-ever-nf.html
+
+Course-use notes: The examples illustrate how relatively simple interactions among components can yield organized higher-level patterns that are not properties of isolated components. Use the cases for analogies and concept checks, while asking the learner to specify the agents, local interactions, resulting pattern, and level at which the pattern exists.
+`,
+  },
+  {
+    filename: "08-Kurzgesagt-emergence.txt",
+    content: `
+Kurzgesagt. (2017). Emergence - How Stupid Things Become Smart Together.
+Source: https://www.youtube.com/watch?v=16W7c0mb-rE
+
+Course-use notes: The video uses ant colonies and other systems to show how simple agents following local rules can collectively produce adaptive, organized behavior. Colony-level capabilities emerge from interactions rather than residing in any one ant. Use this source to help learners explain a causal path from local rules to a higher-level property.
+`,
+  },
+  {
+    filename: "09-Systems-Innovation-complex-system.txt",
+    content: `
+Systems Innovation. (2017). What is a complex system?
+Source: https://www.youtube.com/watch?v=vp8v2Udd_PM
+
+Course-use notes: The video introduces interconnected parts, nonlinear interaction, and emergence, using human consciousness as an example of a higher-level phenomenon associated with interactions among components of the brain. Use the example to ask how SystemAnalysis and EmergentProperties illuminate the relationship between levels without reducing the higher-level phenomenon to a simple list of parts.
+`,
+  },
+] as const;
 
 const ASSIGNMENT_INSTRUCTIONS = `
 Assignment 1 - Complex Social System Analysis
@@ -190,10 +263,7 @@ async function createDemoSession() {
         "Learner-authored progress appropriate to their starting point: an accurate task map, a justified system choice, clarified foundational concepts, a question-driven multilevel analysis, an emergent-property explanation, evidence decisions, or a revision of their own work.",
       readings: {
         create: [
-          {
-            filename: "SystemAnalysis-course-definition.txt",
-            content: COURSE_READING,
-          },
+          ...COURSE_MATERIALS,
           {
             filename: "Assignment-1-instructions.txt",
             content: ASSIGNMENT_INSTRUCTIONS,

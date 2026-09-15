@@ -184,41 +184,8 @@ export function responseRequiresGrounding(
   return /\[(DIRECT_ANSWER|FEEDBACK_TYPE|EXPERT_MODEL):/i.test(response) || overlapsSource;
 }
 
-export function shouldShowLearnerCitation(response: string): boolean {
-  return /\[(DIRECT_ANSWER|FEEDBACK_TYPE|EXPERT_MODEL):/i.test(response);
-}
-
-export function ensureKnowledgeScopeCue(
-  response: string,
-  knowledgeScope: KnowledgeScope | null
-): string {
-  if (knowledgeScope !== "background" && knowledgeScope !== "mixed") return response;
-
-  const alreadySignalsBroaderContext =
-    /\b(beyond|outside|not (?:covered|discussed|stated|addressed)|broader (?:context|connection|knowledge)|building on the reading|the reading does not)\b/i.test(
-      response
-    );
-  if (alreadySignalsBroaderContext) return response;
-
-  const cue = knowledgeScope === "background"
-    ? "The reading does not address this directly, but broader context can help:"
-    : "Building on the reading, here is a broader connection:";
-  return `${cue}\n\n${response}`;
-}
-
 export function buildUnsupportedSourceResponse(): string {
-  return "The uploaded source materials do not provide enough support for me to answer that as a course-content claim.\n\n**What part of the reading seems most relevant to your question?**";
-}
-
-export function appendLearnerCitations(
-  response: string,
-  citations: SourcePassage[]
-): string {
-  if (citations.length === 0) return response;
-  const labels = citations
-    .slice(0, 2)
-    .map((citation) => `${citation.filename} (passage ${citation.id.slice(0, 8)})`);
-  return `${response}\n\nSource: ${labels.join("; ")}`;
+  return "I cannot verify that claim from the course materials available here. I can still help you test the idea using broader knowledge or identify what evidence would support it.\n\n**What claim are you trying to establish?**";
 }
 
 export function sourceSetVersion(sources: SourceDocument[]): string {

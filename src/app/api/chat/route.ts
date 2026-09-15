@@ -26,15 +26,12 @@ import {
   countHelpRequests,
 } from "@/lib/learner-experience";
 import {
-  appendLearnerCitations,
   buildUnsupportedSourceResponse,
-  ensureKnowledgeScopeCue,
   GROUNDING_VERSIONS,
   parseKnowledgeScope,
   parseSourceIds,
   responseRequiresGrounding,
   retrieveRelevantPassages,
-  shouldShowLearnerCitation,
   sourceSetVersion,
   validateSourceIds,
 } from "@/lib/source-grounding";
@@ -301,6 +298,8 @@ export async function POST(req: Request) {
       hintLadderRung: effectiveHintRung,
       prerequisiteMap: activePrerequisiteMap,
       sessionPurpose: studentSession.session.sessionPurpose,
+      planningTaskInstructions: studentSession.session.planningTaskInstructions,
+      planningIntendedOutput: studentSession.session.planningIntendedOutput,
     });
     const learnerSupportInstruction = buildLearnerResponseSupportInstruction(
       lastUserMessage.content,
@@ -421,21 +420,14 @@ export async function POST(req: Request) {
             fullResponse
           );
           const requiresGrounding = responseRequiresGrounding(fullResponse, sourcePassages);
-          const learnerCitationVisible =
-            requiresGrounding &&
-            validCitations.length > 0 &&
-            shouldShowLearnerCitation(fullResponse);
+          // Source IDs, scope, and validation remain available to instructors and
+          // the evidence system. They are deliberately not rendered to learners.
+          const learnerCitationVisible = false;
           const parsedResponse = parseTags(fullResponse);
-          const transparentResponse = ensureKnowledgeScopeCue(
-            parsedResponse.cleanedText,
-            knowledgeScope
-          );
           const groundedResponse =
             requiresGrounding && validCitations.length === 0
               ? buildUnsupportedSourceResponse()
-              : learnerCitationVisible
-                ? appendLearnerCitations(transparentResponse, validCitations)
-                : transparentResponse;
+              : parsedResponse.cleanedText;
           const finalCleanedText = groundedResponse.replace(/[\u2014\u2013]/g, "-");
           const groundingStatus = requiresGrounding
             ? validCitations.length > 0

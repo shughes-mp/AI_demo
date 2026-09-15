@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { TypingIndicator } from "@/components/chat/typing-indicator";
 import {
@@ -193,6 +193,57 @@ export function AssignmentDemo() {
   const [evidenceError, setEvidenceError] = useState<string | null>(null);
   const started = useRef(false);
 
+  useEffect(() => {
+    const syncFromBrowserHistory = () => {
+      const url = new URL(window.location.href);
+      const requestedView = url.searchParams.get("view");
+      const nextView: DemoView =
+        requestedView === "learner" ||
+        requestedView === "instructor" ||
+        requestedView === "reviewer"
+          ? requestedView
+          : "intro";
+      setView(nextView);
+      setAssignmentOpen(url.searchParams.get("panel") === "assignment");
+    };
+
+    syncFromBrowserHistory();
+    window.addEventListener("popstate", syncFromBrowserHistory);
+    return () => window.removeEventListener("popstate", syncFromBrowserHistory);
+  }, []);
+
+  function navigateToView(nextView: DemoView) {
+    const url = new URL(window.location.href);
+    if (nextView === "intro") url.searchParams.delete("view");
+    else url.searchParams.set("view", nextView);
+    url.searchParams.delete("panel");
+    window.history.pushState({ demoView: nextView }, "", url);
+    setView(nextView);
+    setAssignmentOpen(false);
+  }
+
+  function openAssignment() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("panel", "assignment");
+    window.history.pushState(
+      { demoView: view, assignmentOpen: true },
+      "",
+      url
+    );
+    setAssignmentOpen(true);
+  }
+
+  function closeAssignment() {
+    if (window.history.state?.assignmentOpen) {
+      window.history.back();
+      return;
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.delete("panel");
+    window.history.replaceState({ demoView: view }, "", url);
+    setAssignmentOpen(false);
+  }
+
   const learnerMessages = useMemo(
     () => messages.filter((message) => message.role === "user"),
     [messages]
@@ -272,7 +323,7 @@ export function AssignmentDemo() {
     setError(null);
     setEvidenceSnapshot(null);
     setEvidenceError(null);
-    setView("learner");
+    navigateToView("learner");
     void prepareLiveSession();
   }
 
@@ -295,7 +346,7 @@ export function AssignmentDemo() {
     setError(null);
     setEvidenceSnapshot(null);
     setEvidenceError(null);
-    setView("learner");
+    navigateToView("learner");
   }
 
   async function sendMessage(content: string) {
@@ -395,7 +446,7 @@ export function AssignmentDemo() {
 
   async function openInstructor() {
     setVisitedInstructor(true);
-    setView("instructor");
+    navigateToView("instructor");
     if (
       connectionMode !== "live" ||
       !studentSessionId ||
@@ -463,7 +514,7 @@ export function AssignmentDemo() {
 
   function resetDemo() {
     started.current = false;
-    setView("intro");
+    navigateToView("intro");
     setMessages(initialMessages());
     setInput("");
     setConnectionMode("starting");
@@ -486,7 +537,7 @@ export function AssignmentDemo() {
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,rgba(20,112,119,0.09),transparent_36%),radial-gradient(circle_at_85%_16%,rgba(197,148,77,0.12),transparent_30%)]" />
       <div className="relative mx-auto min-h-screen w-full max-w-[1440px] px-4 pb-12 sm:px-6 lg:px-10">
         <header className="flex h-[72px] items-center justify-between border-b border-black/8">
-          <button type="button" onClick={() => setView("intro")} className="text-left">
+          <button type="button" onClick={() => navigateToView("intro")} className="text-left">
             <span className="font-serif text-[22px] tracking-[-0.02em]">AI_thena</span>
             <span className="ml-3 hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-[#71716b] sm:inline">
               Colleague demo
@@ -511,16 +562,16 @@ export function AssignmentDemo() {
           <IntroView
             onStart={startLearnerExperience}
             onWorked={loadWorkedExample}
-            onAssignment={() => setAssignmentOpen(true)}
+            onAssignment={openAssignment}
           />
         ) : (
           <>
             <JourneyNav
               view={view}
               visitedInstructor={visitedInstructor}
-              onLearner={() => setView("learner")}
+              onLearner={() => navigateToView("learner")}
               onInstructor={() => void openInstructor()}
-              onReviewer={() => setView("reviewer")}
+              onReviewer={() => navigateToView("reviewer")}
             />
             {view === "learner" ? (
               <LearnerView
@@ -543,7 +594,7 @@ export function AssignmentDemo() {
                 onReducedSupport={beginReducedSupportCheck}
                 onSelectSystem={chooseSystem}
                 onInstructor={() => void openInstructor()}
-                onAssignment={() => setAssignmentOpen(true)}
+                onAssignment={openAssignment}
                 onWorked={loadWorkedExample}
               />
             ) : view === "instructor" ? (
@@ -558,17 +609,17 @@ export function AssignmentDemo() {
                 evidenceLoading={evidenceLoading}
                 evidenceError={evidenceError}
                 onWorked={loadWorkedExample}
-                onLearner={() => setView("learner")}
-                onReviewer={() => setView("reviewer")}
-                onAssignment={() => setAssignmentOpen(true)}
+                onLearner={() => navigateToView("learner")}
+                onReviewer={() => navigateToView("reviewer")}
+                onAssignment={openAssignment}
               />
             ) : (
-              <ReviewerView onInstructor={() => setView("instructor")} />
+              <ReviewerView onInstructor={() => navigateToView("instructor")} />
             )}
           </>
         )}
       </div>
-      {assignmentOpen ? <AssignmentBrief onClose={() => setAssignmentOpen(false)} /> : null}
+      {assignmentOpen ? <AssignmentBrief onClose={closeAssignment} /> : null}
     </main>
   );
 }

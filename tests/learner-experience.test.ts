@@ -210,6 +210,25 @@ test("confidence calibration keeps uncertainty on-topic and tests high confidenc
   );
 });
 
+test("assignment sessions use a private compass and periodic progress-return checks", () => {
+  const base = {
+    lastTopicThread: "choosing a system",
+    currentAttemptCount: 1,
+    exchangeCount: 2,
+    maxExchanges: 10,
+    planningTaskInstructions: "Support the learner with the assignment.",
+    planningIntendedOutput: "A learner-authored system choice.",
+  };
+  const ordinaryTurn = buildContextInstruction(base);
+  const returnCheckTurn = buildContextInstruction({ ...base, exchangeCount: 3 });
+
+  assert.match(ordinaryTurn, /ASSIGNMENT COMPASS/);
+  assert.match(ordinaryTurn, /Do not narrate this private check/i);
+  assert.doesNotMatch(ordinaryTurn, /PROGRESS RETURN CHECK/);
+  assert.match(returnCheckTurn, /PROGRESS RETURN CHECK/);
+  assert.match(returnCheckTurn, /rabbit hole/i);
+});
+
 test("learning behavior changes with the session purpose", () => {
   const preClass = buildSystemPrompt([], false, { sessionPurpose: "pre_class" });
   const afterClass = buildSystemPrompt([], false, { sessionPurpose: "after_class" });

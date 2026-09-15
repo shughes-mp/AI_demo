@@ -2,15 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import {
-  appendLearnerCitations,
   buildGroundedSourceContext,
   buildUnsupportedSourceResponse,
-  ensureKnowledgeScopeCue,
   parseKnowledgeScope,
   parseSourceIds,
   responseRequiresGrounding,
   retrieveRelevantPassages,
-  shouldShowLearnerCitation,
   validateSourceIds,
 } from "../src/lib/source-grounding.ts";
 import {
@@ -60,7 +57,6 @@ test("course-content claims require valid retrieved passage ids", () => {
   const passages = retrieveRelevantPassages("efficiency and effectiveness", sources);
   const response = `The reading distinguishes efficiency from effectiveness.\n[SOURCE_IDS: ${passages[0].id}]\n[DIRECT_ANSWER: distinction]`;
   assert.equal(responseRequiresGrounding(response), true);
-  assert.equal(shouldShowLearnerCitation(response), true);
   assert.deepEqual(parseSourceIds(response), [passages[0].id]);
   assert.equal(validateSourceIds(parseSourceIds(response), passages).length, 1);
   assert.equal(validateSourceIds(parseSourceIds(response), passages, response).length, 1);
@@ -71,10 +67,8 @@ test("broader model knowledge is allowed without being misrepresented as source 
   const response = "A useful analogy is a team that works quickly but solves the wrong problem.\n[KNOWLEDGE_SCOPE: background]\n[SOURCE_IDS: none]\n[DIRECT_ANSWER: analogy]";
   assert.equal(parseKnowledgeScope(response), "background");
   assert.equal(responseRequiresGrounding(response), false);
-  assert.match(
-    ensureKnowledgeScopeCue("A useful analogy is a team that works quickly.", "background"),
-    /reading does not address this directly/i
-  );
+  assert.match(buildSystemPrompt([], false), /broader knowledge/i);
+  assert.match(buildSystemPrompt([], false), /Do not prepend a provenance announcement/i);
 });
 
 test("mixed responses keep the reading grounded and identify the broader connection", () => {
@@ -83,7 +77,6 @@ test("mixed responses keep the reading grounded and identify the broader connect
   assert.equal(parseKnowledgeScope(response), "mixed");
   assert.equal(responseRequiresGrounding(response, passages), true);
   assert.equal(validateSourceIds(parseSourceIds(response), passages, response).length, 1);
-  assert.equal(ensureKnowledgeScopeCue(response, "mixed"), response);
 });
 
 test("a source attribution cannot bypass citation checks by claiming background scope", () => {
@@ -97,13 +90,10 @@ test("a response that supplies passage ids is always treated as source-grounded"
   assert.equal(responseRequiresGrounding(response), true);
 });
 
-test("unsupported and learner-visible citation paths are explicit", () => {
+test("unsupported responses are natural and technical citations stay private", () => {
   assert.deepEqual(retrieveRelevantPassages("completely unrelated astronomy", sources), []);
-  assert.match(buildUnsupportedSourceResponse(), /do not provide enough support/i);
-  const passage = retrieveRelevantPassages("efficiency", sources)[0];
-  const visible = appendLearnerCitations("A supported explanation.", [passage]);
-  assert.match(visible, /Source:/);
-  assert.match(visible, /position-a\.md/);
+  assert.match(buildUnsupportedSourceResponse(), /cannot verify that claim/i);
+  assert.doesNotMatch(buildUnsupportedSourceResponse(), /passage|filename|Source:/i);
 });
 
 test("answer extraction is blocked without reproducing protected content", () => {
