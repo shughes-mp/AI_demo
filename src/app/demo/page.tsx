@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AssignmentDemo } from "./assignment-demo";
 
 export const metadata: Metadata = {
-  title: "Assignment demo · AI_thena",
+  title: "AI-supported assignment demo",
   description:
     "A no-login colleague preview of bounded AI-supported learning and formative assessment.",
 };

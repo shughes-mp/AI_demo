@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     console.error("Failed to generate assignment demo opening:", error);
     return NextResponse.json(
       {
-        error: "AI_thena could not generate the opening question.",
+        error: "The AI coach could not generate the opening question.",
         code: "OPENING_FAILED",
       },
       { status: 500 }

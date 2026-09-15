@@ -184,6 +184,31 @@ test("demo views and the assignment panel participate in browser history", () =>
   assert.match(component, /searchParams\.set\("panel", "assignment"\)/);
 });
 
+test("the demo is neutrally branded and renders skill hashtags in a consistent blue", () => {
+  const component = readFileSync(
+    new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
+    "utf8"
+  );
+  const metadata = readFileSync(
+    new URL("../src/app/demo/page.tsx", import.meta.url),
+    "utf8"
+  );
+  const demoContent = readFileSync(
+    new URL("../src/lib/demo/complex-systems-demo.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(component, /function SkillText/);
+  assert.match(component, /function SkillMarkdown/);
+  assert.match(component, /text-\[#075dcc\]/);
+  assert.match(component, /Assignment support/);
+  assert.match(component, /Assignment coach/);
+  assert.doesNotMatch(component, />AI_thena</);
+  assert.doesNotMatch(component, /AI_thena coach|Live AI_thena|AI_thena is/);
+  assert.doesNotMatch(metadata, /AI_thena/);
+  assert.doesNotMatch(demoContent, /Does AI_thena|AI_thena assignment demo feedback/);
+});
+
 test("the live learner start routes foundational needs and keeps demo-only probes elsewhere", () => {
   const component = readFileSync(
     new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),

@@ -283,7 +283,7 @@ export const SYSTEMS_SOCIETY_DEMO = {
     {
       id: "learner-ownership",
       label: "Learner ownership",
-      question: "Does AI_thena leave the important intellectual work with the learner?",
+      question: "Does the AI coach leave the important intellectual work with the learner?",
     },
     {
       id: "learning-value",
@@ -497,7 +497,7 @@ export function formatReviewerFeedback(feedback: ReviewerFeedback) {
   });
 
   return [
-    "AI_thena assignment demo feedback",
+    "AI-supported assignment demo feedback",
     "",
     "Ratings",
     ...ratingLines,

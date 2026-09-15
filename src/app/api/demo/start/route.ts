@@ -310,7 +310,7 @@ export async function POST(request: Request) {
         mode: "unavailable",
         reason: "MODEL_NOT_CONFIGURED",
         message:
-          "Live AI_thena is not configured on this server. Add ANTHROPIC_API_KEY to use the interactive experience.",
+          "Live AI is not configured on this server. Add ANTHROPIC_API_KEY to use the interactive experience.",
       },
       { status: 503, headers: rateLimit.headers }
     );
@@ -345,7 +345,7 @@ export async function POST(request: Request) {
       {
         mode: "unavailable",
         reason: "START_FAILED",
-        message: "AI_thena could not create the live demo session. Please try again.",
+        message: "The demo could not create a live AI session. Please try again.",
       },
       { status: 500, headers: rateLimit.headers }
     );

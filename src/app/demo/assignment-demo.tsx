@@ -20,6 +20,54 @@ type DemoMessage = {
 
 type ConnectionMode = "starting" | "live" | "unavailable" | "worked";
 
+const SKILL_TOKEN_PATTERN = /(#[A-Za-z][A-Za-z0-9_-]*)/g;
+
+function neutralDemoText(value: string) {
+  return value.replace(/AI[_-]thena(?:[’']s)?/gi, "the AI coach");
+}
+
+function SkillText({ children }: { children: string }) {
+  const value = neutralDemoText(children);
+  return (
+    <>
+      {value.split(SKILL_TOKEN_PATTERN).map((part, index) =>
+        part.startsWith("#") ? (
+          <span key={`${part}-${index}`} className="font-semibold text-[#075dcc]">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
+
+function skillLinkedMarkdown(value: string) {
+  return neutralDemoText(value).replace(SKILL_TOKEN_PATTERN, "[$1](#skill-$1)");
+}
+
+function SkillMarkdown({ children }: { children: string }) {
+  return (
+    <ReactMarkdown
+      components={{
+        p: ({ children: paragraph }) => <p className="mb-3 last:mb-0">{paragraph}</p>,
+        strong: ({ children: strong }) => <strong className="font-bold">{strong}</strong>,
+        a: ({ href, children: link }) =>
+          href?.startsWith("#skill-") ? (
+            <span className="font-semibold text-[#075dcc]">{link}</span>
+          ) : (
+            <a href={href} className="text-[#075dcc] underline" target="_blank" rel="noreferrer">
+              {link}
+            </a>
+          ),
+      }}
+    >
+      {skillLinkedMarkdown(children)}
+    </ReactMarkdown>
+  );
+}
+
 type EvidenceSnapshot = {
   source: "live_ai_thena";
   generatedAt: string;
@@ -286,7 +334,7 @@ export function AssignmentDemo() {
         });
         const openingData = await openingResponse.json();
         if (!openingResponse.ok || !openingData.opening) {
-          throw new Error(openingData.error || "AI_thena could not begin the conversation.");
+          throw new Error(openingData.error || "The AI coach could not begin the conversation.");
         }
         setMessages([
           { id: messageId(), role: "assistant", content: openingData.opening },
@@ -296,7 +344,7 @@ export function AssignmentDemo() {
         setConnectionMode("unavailable");
         setError(
           data.message ||
-            "Live AI_thena is unavailable on this server. You can still inspect the pre-recorded example."
+            "Live AI is unavailable on this server. You can still inspect the pre-recorded example."
         );
       }
     } catch (sessionError) {
@@ -304,7 +352,7 @@ export function AssignmentDemo() {
       setError(
         sessionError instanceof Error
           ? sessionError.message
-          : "Live AI_thena is unavailable on this server."
+          : "Live AI is unavailable on this server."
       );
     }
   }
@@ -388,10 +436,11 @@ export function AssignmentDemo() {
         if (!response.ok) {
           const failure = await response.json().catch(() => ({}));
           throw new Error(
-            failure.error || "AI_thena could not respond. Please try again."
+            failure.error?.replace(/AI_thena(?:’s)?/g, "The AI coach") ||
+              "The AI coach could not respond. Please try again."
           );
         }
-        if (!response.body) throw new Error("AI_thena returned no response.");
+        if (!response.body) throw new Error("The AI coach returned no response.");
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let done = false;
@@ -465,7 +514,7 @@ export function AssignmentDemo() {
         body: JSON.stringify({ studentSessionId, capabilityToken }),
       });
       if (!endResponse.ok) {
-        throw new Error("AI_thena could not create the learner summary.");
+        throw new Error("The AI coach could not create the learner summary.");
       }
 
       const evidenceResponse = await fetch("/api/demo/evidence", {
@@ -479,7 +528,7 @@ export function AssignmentDemo() {
       });
       const evidenceData = await evidenceResponse.json();
       if (!evidenceResponse.ok) {
-        throw new Error(evidenceData.error || "AI_thena could not load the evidence.");
+        throw new Error(evidenceData.error || "The AI coach could not load the evidence.");
       }
       setEvidenceSnapshot(evidenceData as EvidenceSnapshot);
 
@@ -505,7 +554,7 @@ export function AssignmentDemo() {
       setEvidenceError(
         snapshotError instanceof Error
           ? snapshotError.message
-          : "AI_thena could not prepare the instructor view."
+          : "The AI coach could not prepare the instructor view."
       );
     } finally {
       setEvidenceLoading(false);
@@ -538,7 +587,7 @@ export function AssignmentDemo() {
       <div className="relative mx-auto min-h-screen w-full max-w-[1440px] px-4 pb-12 sm:px-6 lg:px-10">
         <header className="flex h-[72px] items-center justify-between border-b border-black/8">
           <button type="button" onClick={() => navigateToView("intro")} className="text-left">
-            <span className="font-serif text-[22px] tracking-[-0.02em]">AI_thena</span>
+            <span className="font-serif text-[22px] tracking-[-0.02em]">Assignment support</span>
             <span className="ml-3 hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-[#71716b] sm:inline">
               Colleague demo
             </span>
@@ -679,7 +728,7 @@ function IntroView({ onStart, onWorked, onAssignment }: { onStart: () => void; o
             <p className="flex gap-3 text-sm leading-6 text-white/76">
               <span aria-hidden className="mt-0.5 text-[#d6ad68]">✦</span>
               <span>
-                AI_thena will ask you to think first, provide only the support you need, and help you improve your reasoning. It will not write the assignment.
+                The AI coach will ask you to think first, provide only the support you need, and help you improve your reasoning. It will not write the assignment.
               </span>
             </p>
             <p className="mt-5 border-t border-white/10 pt-5 text-sm leading-6 text-white/60">
@@ -738,7 +787,7 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#155f64] text-xs font-bold text-white">{step.number}</span>
                     <div>
                       <h3 className="text-sm font-bold text-[#2d2e2a]">{step.title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-[#66665f]">{step.summary}</p>
+                      <p className="mt-1 text-sm leading-6 text-[#66665f]"><SkillText>{step.summary}</SkillText></p>
                     </div>
                   </article>
                 ))}
@@ -755,14 +804,14 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
                     role="tab"
                     aria-selected={activeOutcome.id === outcome.id}
                     onClick={() => setActiveOutcomeId(outcome.id)}
-                    className={`rounded-full px-4 py-2 text-xs font-bold transition ${activeOutcome.id === outcome.id ? "bg-[#155f64] text-white" : "bg-[#efede7] text-[#585953] hover:bg-[#e5e2da]"}`}
+                    className={`rounded-full px-4 py-2 text-xs font-bold text-[#075dcc] transition ${activeOutcome.id === outcome.id ? "bg-[#e7f0ff] ring-1 ring-[#075dcc]/25" : "bg-[#efede7] hover:bg-[#e5e2da]"}`}
                   >
-                    {outcome.label}
+                    <SkillText>{outcome.label}</SkillText>
                   </button>
                 ))}
               </div>
               <div className="mt-4 rounded-2xl bg-[#242a29] p-5 text-white" role="tabpanel">
-                <h3 className="text-sm font-bold text-[#9ed2cf]">{activeOutcome.label}</h3>
+                <h3 className="inline-flex rounded-md bg-[#edf4ff] px-2 py-1 text-sm font-bold"><SkillText>{activeOutcome.label}</SkillText></h3>
                 <p className="mt-2 text-sm leading-6 text-white/72">{activeOutcome.short}</p>
                 <ol className="mt-5 space-y-3 border-t border-white/10 pt-5">
                   {activeOutcome.rubric.map((descriptor, band) => (
@@ -774,7 +823,7 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
                 </ol>
               </div>
               <div className="mt-4 rounded-2xl border border-[#155f64]/14 bg-[#edf6f4] p-4 text-sm leading-6 text-[#4c5f5c]">
-                <strong className="text-[#155f64]">Also required: {SYSTEMS_SOCIETY_DEMO.additionalSkill.label}</strong>
+                <strong className="text-[#155f64]">Also required: <SkillText>{SYSTEMS_SOCIETY_DEMO.additionalSkill.label}</SkillText></strong>
                 <span className="mt-1 block">{SYSTEMS_SOCIETY_DEMO.additionalSkill.short}</span>
               </div>
             </section>
@@ -799,12 +848,12 @@ function AssignmentBrief({ onClose }: { onClose: () => void }) {
               {SYSTEMS_SOCIETY_DEMO.submissionRequirements.map((requirement) => (
                 <li key={requirement} className="flex gap-3 text-xs leading-5 text-[#5f6059]">
                   <span aria-hidden className="mt-0.5 text-[#155f64]">✓</span>
-                  <span>{requirement}</span>
+                  <span><SkillText>{requirement}</SkillText></span>
                 </li>
               ))}
             </ul>
             <div className="mt-6 border-t border-black/8 pt-5">
-              <p className="text-xs font-bold text-[#2d2e2a]">How AI_thena may help</p>
+              <p className="text-xs font-bold text-[#2d2e2a]">How the AI coach may help</p>
               <p className="mt-2 text-xs leading-5 text-[#696963]">It can clarify instructions, explain concepts with other examples, help test a system choice, question reasoning, or critique learner-authored work. It will not produce a submission-ready section.</p>
             </div>
           </aside>
@@ -818,7 +867,7 @@ function ScenarioItem({ number, label, value }: { number: string; label: string;
   return (
     <div className="min-h-32 bg-[#242a29] p-6">
       <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/38">{number} · {label}</dt>
-      <dd className="mt-3 text-sm font-semibold leading-5 text-white/90">{value}</dd>
+      <dd className="mt-3 text-sm font-semibold leading-5 text-white/90"><SkillText>{value}</SkillText></dd>
     </div>
   );
 }
@@ -967,12 +1016,12 @@ function LearnerView({
           <div className="mt-4 space-y-4 border-t border-black/7 pt-4">
             {SYSTEMS_SOCIETY_DEMO.outcomes.map((outcome) => (
               <div key={outcome.id}>
-                <p className="text-xs font-bold text-[#2d2e2a]">{outcome.label}</p>
+                <p className="text-xs font-bold"><SkillText>{outcome.label}</SkillText></p>
                 <p className="mt-1 text-xs leading-5 text-[#6d6d66]">{outcome.short}</p>
               </div>
             ))}
             <div>
-              <p className="text-xs font-bold text-[#2d2e2a]">{SYSTEMS_SOCIETY_DEMO.additionalSkill.label} · required</p>
+              <p className="text-xs font-bold"><SkillText>{SYSTEMS_SOCIETY_DEMO.additionalSkill.label}</SkillText> · required</p>
               <p className="mt-1 text-xs leading-5 text-[#6d6d66]">{SYSTEMS_SOCIETY_DEMO.additionalSkill.short}</p>
             </div>
           </div>
@@ -982,7 +1031,7 @@ function LearnerView({
           <div className="mt-4 space-y-4 border-t border-black/7 pt-4">
             {SYSTEMS_SOCIETY_DEMO.vocabulary.map((item) => (
               <div key={item.term}>
-                <p className="text-xs font-bold">{item.term}</p>
+                <p className="text-xs font-bold"><SkillText>{item.term}</SkillText></p>
                 <p className="mt-1 text-xs leading-5 text-[#6d6d66]">{item.definition}</p>
               </div>
             ))}
@@ -1001,8 +1050,8 @@ function LearnerView({
       <section className="flex min-h-[720px] flex-col overflow-hidden rounded-[26px] bg-white shadow-[0_30px_90px_rgba(40,42,36,0.10)] ring-1 ring-black/6">
         <header className="flex items-center justify-between border-b border-black/7 px-5 py-4 sm:px-7">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#155f64] font-serif text-lg text-white">A</span>
-            <div><h2 className="text-sm font-bold">AI_thena coach</h2><p className="text-xs text-[#777770]">Helps you think without writing for you</p></div>
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#155f64] text-xs font-bold text-white">AI</span>
+            <div><h2 className="text-sm font-bold">Assignment coach</h2><p className="text-xs text-[#777770]">Helps you think without writing for you</p></div>
           </div>
           <ModeBadge mode={connectionMode} />
         </header>
@@ -1011,7 +1060,7 @@ function LearnerView({
           {connectionMode === "starting" ? (
             <div className="mx-auto mt-20 max-w-lg rounded-[22px] bg-white p-7 text-center shadow-sm ring-1 ring-black/6">
               <span className="mx-auto block h-8 w-8 animate-spin rounded-full border-2 border-[#155f64]/20 border-t-[#155f64]" />
-              <h3 className="mt-5 font-serif text-2xl">AI_thena is preparing your session</h3>
+              <h3 className="mt-5 font-serif text-2xl">Preparing your session</h3>
               <p className="mt-2 text-sm leading-6 text-[#6d6d66]">A fresh assignment context and opening question are being created for this run.</p>
             </div>
           ) : null}
@@ -1020,7 +1069,7 @@ function LearnerView({
               <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-amber-700">Live AI unavailable</p>
               <h3 className="mt-3 font-serif text-3xl tracking-[-0.025em]">This server cannot start the real conversation.</h3>
               <p className="mt-3 text-sm leading-6 text-[#65655f]">{error || "The model connection is not configured."}</p>
-              <p className="mt-3 text-xs leading-5 text-[#85857e]">No scripted reply has been substituted. The worked example remains clearly separate from the live AI_thena experience.</p>
+              <p className="mt-3 text-xs leading-5 text-[#85857e]">No scripted reply has been substituted. The worked example remains clearly separate from the live AI experience.</p>
               <button type="button" onClick={onWorked} className="mt-6 rounded-full bg-[#155f64] px-5 py-3 text-xs font-bold text-white">View the pre-recorded example →</button>
             </div>
           ) : null}
@@ -1038,7 +1087,7 @@ function LearnerView({
             </div>
           ) : null}
           {isSending ? (
-            <div className="ml-11" role="status" aria-label="AI_thena is responding">
+            <div className="ml-11" role="status" aria-label="The AI coach is responding">
               <TypingIndicator />
             </div>
           ) : null}
@@ -1100,11 +1149,9 @@ function ConversationMessage({ message }: { message: DemoMessage }) {
   if (!user && !message.content) return null;
   return (
     <div className={`flex gap-3 ${user ? "justify-end" : "justify-start"}`}>
-      {!user ? <span className="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#d9ecea] text-xs font-bold text-[#155f64]">A</span> : null}
+      {!user ? <span className="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#d9ecea] text-[10px] font-bold text-[#155f64]">AI</span> : null}
       <div className={`max-w-[82%] rounded-2xl px-5 py-4 text-[15px] leading-7 ${user ? "rounded-br-sm bg-[#242a29] text-white" : "rounded-bl-sm bg-white text-[#343530] shadow-sm ring-1 ring-black/6"}`}>
-        <ReactMarkdown components={{ p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>, strong: ({ children }) => <strong className="font-bold">{children}</strong> }}>
-          {message.content}
-        </ReactMarkdown>
+        <SkillMarkdown>{message.content}</SkillMarkdown>
       </div>
       {user ? <span className="mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#e9e2d5] text-xs font-bold text-[#6d5734]">You</span> : null}
     </div>
@@ -1112,7 +1159,7 @@ function ConversationMessage({ message }: { message: DemoMessage }) {
 }
 
 function QuickPrompt({ label, onClick }: { label: string; onClick: () => void }) {
-  return <button type="button" onClick={onClick} className="min-h-12 rounded-xl border border-[#155f64]/18 bg-white px-4 py-3 text-left text-xs font-semibold leading-5 text-[#155f64] shadow-sm transition hover:-translate-y-0.5 hover:border-[#155f64]/35 hover:bg-[#f7fbfa]">{label}</button>;
+  return <button type="button" onClick={onClick} className="min-h-12 rounded-xl border border-[#155f64]/18 bg-white px-4 py-3 text-left text-xs font-semibold leading-5 text-[#155f64] shadow-sm transition hover:-translate-y-0.5 hover:border-[#155f64]/35 hover:bg-[#f7fbfa]"><SkillText>{label}</SkillText></button>;
 }
 
 function InstructorView({
@@ -1192,13 +1239,13 @@ function InstructorView({
           <div>
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#a9d9d5]">Pre-recorded example · instructor view</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.02] tracking-[-0.035em]">What does the conversation reveal about the learner’s thinking?</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This illustrative readout uses the example transcript - not live AI_thena evidence. It is formative evidence for instructor review, not an automated grade or a claim of durable mastery.</p>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This illustrative readout uses the example transcript - not evidence from a live AI conversation. It is formative evidence for instructor review, not an automated grade or a claim of durable mastery.</p>
             <button type="button" onClick={onAssignment} className="mt-5 text-xs font-bold text-[#a9d9d5] underline decoration-white/20 underline-offset-4 hover:text-white">Review the relevant assignment instructions</button>
           </div>
           <div className="flex-none rounded-2xl bg-white/8 p-5 text-right ring-1 ring-white/10">
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">Provisional rubric match</p>
             <p className="mt-2 font-serif text-5xl">{band}<span className="text-xl text-white/40">/5</span></p>
-            <p className="mt-1 text-xs text-white/56">#SystemAnalysis</p>
+            <p className="mt-2 inline-flex rounded-md bg-[#edf4ff] px-2 py-1 text-xs"><SkillText>#SystemAnalysis</SkillText></p>
           </div>
         </div>
       </section>
@@ -1249,7 +1296,7 @@ function InstructorView({
         <div className="mt-5 space-y-4 border-t border-black/7 pt-5">
           {messages.filter((message) => message.content).map((message) => (
             <blockquote key={message.id} className={`border-l-2 pl-4 text-sm leading-6 ${message.role === "user" ? "border-[#155f64]" : "border-[#c59a55] text-[#686861]"}`}>
-              <strong className="mr-2 text-xs uppercase tracking-[0.08em]">{message.role === "user" ? "Learner" : "AI_thena"}</strong>{message.content.replace(/\*\*/g, "")}
+              <strong className="mr-2 text-xs uppercase tracking-[0.08em]">{message.role === "user" ? "Learner" : "AI coach"}</strong><SkillText>{message.content.replace(/\*\*/g, "")}</SkillText>
             </blockquote>
           ))}
           <p className="pt-2 text-[11px] text-[#85857e]">Experience mode: {connectionMode}. Support rung reached: {supportLevel}/4.</p>
@@ -1263,7 +1310,7 @@ function InstructorLoading() {
   return (
     <section className="mx-auto max-w-3xl rounded-[28px] bg-white p-10 text-center shadow-[0_30px_90px_rgba(40,42,36,0.10)] ring-1 ring-black/6">
       <span className="mx-auto block h-10 w-10 animate-spin rounded-full border-2 border-[#155f64]/20 border-t-[#155f64]" />
-      <h2 className="mt-6 font-serif text-4xl tracking-[-0.03em]">AI_thena is assembling the evidence.</h2>
+      <h2 className="mt-6 font-serif text-4xl tracking-[-0.03em]">Assembling the evidence.</h2>
       <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[#696961]">It is closing this learner run, generating the learner summary, and translating the persisted conversation into a formative instructor brief.</p>
     </section>
   );
@@ -1322,13 +1369,13 @@ function LiveInstructorView({
       <section className="rounded-[28px] bg-[#242a29] p-7 text-white shadow-[0_30px_80px_rgba(39,42,37,0.16)] sm:p-10">
         <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#a9d9d5]">Live AI_thena evidence · instructor view</span>
+            <span className="inline-flex rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#a9d9d5]">Live conversation evidence · instructor view</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.02] tracking-[-0.035em]">What does this conversation actually reveal?</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This readout comes from the session AI_thena just persisted and analyzed. It is formative evidence for review - not an automated grade or a claim of durable mastery.</p>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62">This readout comes from the conversation the system just persisted and analyzed. It is formative evidence for review - not an automated grade or a claim of durable mastery.</p>
             <button type="button" onClick={onAssignment} className="mt-5 text-xs font-bold text-[#a9d9d5] underline decoration-white/20 underline-offset-4 hover:text-white">Compare with the assignment and 0-5 rubric</button>
           </div>
           <div className="flex-none rounded-2xl bg-white/8 p-5 text-right ring-1 ring-white/10">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">AI_thena outcome status</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">AI-generated outcome status</p>
             <p className="mt-2 font-serif text-3xl">{latestAssessment ? humanizeStatus(latestAssessment.status) : "Not yet assessed"}</p>
             <p className="mt-1 text-xs text-white/56">{latestAssessment ? `${latestAssessment.confidence} confidence` : "Instructor judgment needed"}</p>
           </div>
@@ -1344,7 +1391,7 @@ function LiveInstructorView({
         <EvidenceSummary
           label="AI interpretation"
           tone="gold"
-          text={latestAssessment?.evidenceSummary || evidenceItems[0]?.classificationLabel || "AI_thena found too little evidence to make a useful outcome-level interpretation."}
+          text={latestAssessment?.evidenceSummary || evidenceItems[0]?.classificationLabel || "The system found too little evidence to make a useful outcome-level interpretation."}
         />
         <EvidenceSummary
           label="Not established"
@@ -1361,9 +1408,9 @@ function LiveInstructorView({
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {assessedOutcomes.map(({ outcome, assessment }) => (
             <article key={outcome.id} className={`rounded-2xl p-4 ring-1 ${assessment ? "bg-[#edf6f4] ring-[#155f64]/15" : "bg-[#f3f1eb] ring-black/5"}`}>
-              <p className="text-xs font-bold text-[#155f64]">{outcome.label}</p>
+              <p className="text-xs font-bold"><SkillText>{outcome.label}</SkillText></p>
               <p className="mt-2 text-sm font-bold text-[#343530]">{assessment ? humanizeStatus(assessment.status) : "Not assessed"}</p>
-              <p className="mt-2 text-xs leading-5 text-[#6d6d66]">{assessment?.evidenceSummary || "No relevant learner evidence was produced in this run."}</p>
+              <p className="mt-2 text-xs leading-5 text-[#6d6d66]"><SkillText>{assessment?.evidenceSummary || "No relevant learner evidence was produced in this run."}</SkillText></p>
             </article>
           ))}
         </div>
@@ -1372,7 +1419,7 @@ function LiveInstructorView({
       <section className="rounded-[26px] bg-white p-6 shadow-[0_22px_65px_rgba(40,42,36,0.07)] ring-1 ring-black/6 sm:p-8">
         <div className="flex flex-col gap-4 border-b border-black/7 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-[#155f64]">Persisted checkpoint evidence</p><h2 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Where the learner’s reasoning was tested</h2></div>
-          <p className="max-w-sm text-xs leading-5 text-[#777770]">These statuses are generated by AI_thena during the conversation. They locate evidence; they do not replace review against the assignment rubric.</p>
+          <p className="max-w-sm text-xs leading-5 text-[#777770]">These statuses are generated by the AI during the conversation. They locate evidence; they do not replace review against the assignment rubric.</p>
         </div>
         <div className="mt-6 grid gap-3 md:grid-cols-2">
           {snapshot.checkpoints.map((checkpoint, index) => {
@@ -1381,10 +1428,10 @@ function LiveInstructorView({
             return (
               <article key={checkpoint.id} className={`rounded-2xl p-5 ring-1 ${complete ? "bg-[#edf6f4] ring-[#155f64]/15" : active ? "bg-amber-50/70 ring-amber-800/10" : "bg-[#f4f2ed] ring-black/5"}`}>
                 <div className="flex items-start justify-between gap-4">
-                  <div><p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#85857e]">Checkpoint {index + 1} · {checkpoint.processLevel}</p><h3 className="mt-2 text-sm font-bold leading-5">{checkpoint.prompt}</h3></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#85857e]">Checkpoint {index + 1} · {checkpoint.processLevel}</p><h3 className="mt-2 text-sm font-bold leading-5"><SkillText>{checkpoint.prompt}</SkillText></h3></div>
                   <span className={`flex-none rounded-full px-2.5 py-1 text-[10px] font-bold ${complete ? "bg-[#155f64] text-white" : active ? "bg-amber-100 text-amber-800" : "bg-black/6 text-[#777770]"}`}>{humanizeStatus(checkpoint.status)}</span>
                 </div>
-                <p className="mt-3 text-xs leading-5 text-[#6d6d66]">{checkpoint.evidenceNotes || (active ? `${checkpoint.turnsSpent} turn${checkpoint.turnsSpent === 1 ? "" : "s"} spent here; no separate evidence note was stored.` : "No evidence opportunity was reached in this conversation.")}</p>
+                <p className="mt-3 text-xs leading-5 text-[#6d6d66]"><SkillText>{checkpoint.evidenceNotes || (active ? `${checkpoint.turnsSpent} turn${checkpoint.turnsSpent === 1 ? "" : "s"} spent here; no separate evidence note was stored.` : "No evidence opportunity was reached in this conversation.")}</SkillText></p>
               </article>
             );
           })}
@@ -1394,9 +1441,9 @@ function LiveInstructorView({
       <section className="grid gap-5 lg:grid-cols-2">
         <article className="rounded-[24px] bg-white p-7 ring-1 ring-black/6">
           <p className="text-xs font-bold uppercase tracking-[0.11em] text-[#155f64]">Learner-facing summary</p>
-          <h3 className="mt-3 font-serif text-2xl tracking-[-0.02em]">What AI_thena would return to the learner</h3>
+          <h3 className="mt-3 font-serif text-2xl tracking-[-0.02em]">What the AI coach would return to the learner</h3>
           <div className="mt-4 text-sm leading-6 text-[#606059]">
-            {snapshot.learner.summary ? <ReactMarkdown>{snapshot.learner.summary}</ReactMarkdown> : <p>No learner summary was generated.</p>}
+            {snapshot.learner.summary ? <SkillMarkdown>{snapshot.learner.summary}</SkillMarkdown> : <p>No learner summary was generated.</p>}
           </div>
         </article>
         <RecommendationCard
@@ -1410,7 +1457,7 @@ function LiveInstructorView({
 
       <section className="rounded-[24px] bg-white/72 p-6 ring-1 ring-black/6 sm:p-8">
         <div className="flex items-end justify-between gap-5">
-          <div><p className="text-xs font-bold uppercase tracking-[0.11em] text-[#7c633a]">Consequential evidence signals</p><h2 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Claims AI_thena was willing to record</h2></div>
+          <div><p className="text-xs font-bold uppercase tracking-[0.11em] text-[#7c633a]">Consequential evidence signals</p><h2 className="mt-2 font-serif text-3xl tracking-[-0.025em]">Claims the AI was willing to record</h2></div>
           <span className="rounded-full bg-[#efece4] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#696961]">{snapshot.evidenceSignals.length} signal{snapshot.evidenceSignals.length === 1 ? "" : "s"}</span>
         </div>
         {snapshot.evidenceSignals.length ? (
@@ -1418,14 +1465,14 @@ function LiveInstructorView({
             {snapshot.evidenceSignals.map((signal) => (
               <article key={signal.id} className="rounded-2xl bg-white p-5 ring-1 ring-black/6">
                 <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.09em] text-[#777770]"><span>{humanizeStatus(signal.signalType)}</span><span>·</span><span>{signal.confidenceLevel} confidence</span><span>·</span><span>{signal.status}</span></div>
-                <p className="mt-3 text-sm font-semibold leading-6">{signal.claim}</p>
+                <p className="mt-3 text-sm font-semibold leading-6"><SkillText>{signal.claim}</SkillText></p>
                 {signal.citations[0] ? <blockquote className="mt-3 border-l-2 border-[#155f64] pl-4 text-xs leading-5 text-[#65655f]">“{signal.citations[0].quotedText}”</blockquote> : null}
                 <p className="mt-3 text-xs leading-5 text-[#777770]">Missing or limiting evidence: {signal.missingEvidence || signal.limitations}</p>
               </article>
             ))}
           </div>
         ) : (
-          <p className="mt-5 rounded-2xl bg-[#f3f1eb] p-5 text-sm leading-6 text-[#66665f]">No consequential evidence signal was recorded. AI_thena only promotes a claim when it can meet the evidence policy; ordinary conversation metadata remains visible above.</p>
+          <p className="mt-5 rounded-2xl bg-[#f3f1eb] p-5 text-sm leading-6 text-[#66665f]">No consequential evidence signal was recorded. The AI only promotes a claim when it can meet the evidence policy; ordinary conversation metadata remains visible above.</p>
         )}
         {snapshot.reportError ? <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-xs text-amber-900">{snapshot.reportError}</p> : null}
       </section>
@@ -1435,7 +1482,7 @@ function LiveInstructorView({
         <div className="mt-5 space-y-4 border-t border-black/7 pt-5">
           {snapshot.messages.map((message) => (
             <blockquote key={message.id} className={`border-l-2 pl-4 text-sm leading-6 ${message.role === "user" ? "border-[#155f64]" : "border-[#c59a55] text-[#686861]"}`}>
-              <strong className="mr-2 text-xs uppercase tracking-[0.08em]">{message.role === "user" ? "Learner" : "AI_thena"}</strong>{message.content}
+              <strong className="mr-2 text-xs uppercase tracking-[0.08em]">{message.role === "user" ? "Learner" : "AI coach"}</strong><SkillText>{message.content}</SkillText>
               <p className="mt-2 text-[10px] uppercase tracking-[0.08em] text-[#999991]">{[message.topicThread, message.mode, message.questionType, message.feedbackType, message.engagementFlag].filter(Boolean).join(" · ") || "No diagnostic tags stored"}</p>
             </blockquote>
           ))}
@@ -1455,11 +1502,11 @@ function LiveInstructorView({
 
 function EvidenceSummary({ label, text, tone }: { label: string; text: string; tone: "teal" | "gold" | "grey" }) {
   const accent = tone === "teal" ? "bg-[#155f64]" : tone === "gold" ? "bg-[#c2944b]" : "bg-[#8b8b84]";
-  return <article className="rounded-[22px] bg-white/72 p-6 ring-1 ring-black/6"><span className={`mb-5 block h-1 w-10 rounded-full ${accent}`} /><p className="text-xs font-bold uppercase tracking-[0.1em] text-[#777770]">{label}</p><p className="mt-3 text-sm leading-6 text-[#3f403b]">{text}</p></article>;
+  return <article className="rounded-[22px] bg-white/72 p-6 ring-1 ring-black/6"><span className={`mb-5 block h-1 w-10 rounded-full ${accent}`} /><p className="text-xs font-bold uppercase tracking-[0.1em] text-[#777770]">{label}</p><p className="mt-3 text-sm leading-6 text-[#3f403b]"><SkillText>{text}</SkillText></p></article>;
 }
 
 function RecommendationCard({ kicker, title, text, action, onAction }: { kicker: string; title: string; text: string; action: string; onAction: () => void }) {
-  return <article className="rounded-[24px] bg-[#ece8de] p-7"><p className="text-xs font-bold uppercase tracking-[0.11em] text-[#7c633a]">{kicker}</p><h3 className="mt-3 font-serif text-2xl tracking-[-0.02em]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#606059]">{text}</p><button type="button" onClick={onAction} className="mt-6 text-xs font-bold text-[#155f64] hover:underline">{action} →</button></article>;
+  return <article className="rounded-[24px] bg-[#ece8de] p-7"><p className="text-xs font-bold uppercase tracking-[0.11em] text-[#7c633a]">{kicker}</p><h3 className="mt-3 font-serif text-2xl tracking-[-0.02em]"><SkillText>{title}</SkillText></h3><p className="mt-3 text-sm leading-6 text-[#606059]"><SkillText>{text}</SkillText></p><button type="button" onClick={onAction} className="mt-6 text-xs font-bold text-[#155f64] hover:underline">{action} →</button></article>;
 }
 
 function ReviewerView({ onInstructor }: { onInstructor: () => void }) {
