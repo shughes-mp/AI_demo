@@ -225,7 +225,6 @@ export function AssignmentDemo() {
       if (data.mode === "live" && data.studentSessionId && data.capabilityToken) {
         setStudentSessionId(data.studentSessionId);
         setCapabilityToken(data.capabilityToken);
-        setConnectionMode("live");
         const openingResponse = await fetch("/api/demo/opening", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -241,6 +240,7 @@ export function AssignmentDemo() {
         setMessages([
           { id: messageId(), role: "assistant", content: openingData.opening },
         ]);
+        setConnectionMode("live");
       } else {
         setConnectionMode("unavailable");
         setError(

@@ -176,6 +176,10 @@ test("the demo uses the original waiting animation and context-neutral learner l
   assert.match(component, /import \{ TypingIndicator \}/);
   assert.match(component, /<TypingIndicator \/>/);
   assert.doesNotMatch(component, /considering your reasoning/i);
+  assert.match(
+    component,
+    /setMessages\(\[\s*\{ id: messageId\(\), role: "assistant", content: openingData\.opening \},\s*\]\);\s*setConnectionMode\("live"\)/
+  );
   assert.match(component, /Ask a question, share an idea, or paste something you want to discuss/);
   assert.match(component, /I’m new to this\. What exactly do I need to do\?/);
   assert.match(startRoute, /LEARNER-FACING VOICE AND EXPERIENCE/);
