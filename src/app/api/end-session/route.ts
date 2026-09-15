@@ -67,26 +67,36 @@ export async function POST(req: Request) {
       (item) => !item.resolved || item.persistentlyUnresolved
     );
 
-    const prompt = buildLearnerSummaryPrompt({
-      transcript,
-      unresolvedMisconceptions: unresolvedMisconceptions.map((item) => ({
+    const summaryMisconceptions = unresolvedMisconceptions.map((item) => ({
         topicThread: item.topicThread,
         description: item.description,
-      })),
-    });
+      }));
+    const learnerTurnCount = studentSession.messages.filter(
+      (message) => message.role === "user"
+    ).length;
+    let validatedSummary: string;
 
-    const { text } = await generateText({
-      model: anthropic(MODEL_PRIMARY),
-      prompt,
-    });
-    const validatedSummary = validateLearnerSummary(
-      text,
-      studentSession.messages,
-      unresolvedMisconceptions.map((item) => ({
-        topicThread: item.topicThread,
-        description: item.description,
-      }))
-    );
+    if (learnerTurnCount < 3) {
+      validatedSummary = validateLearnerSummary(
+        "",
+        studentSession.messages,
+        summaryMisconceptions
+      );
+    } else {
+      const prompt = buildLearnerSummaryPrompt({
+        transcript,
+        unresolvedMisconceptions: summaryMisconceptions,
+      });
+      const { text } = await generateText({
+        model: anthropic(MODEL_PRIMARY),
+        prompt,
+      });
+      validatedSummary = validateLearnerSummary(
+        text,
+        studentSession.messages,
+        summaryMisconceptions
+      );
+    }
 
     // Save summary and mark endedAt
     await prisma.studentSession.update({

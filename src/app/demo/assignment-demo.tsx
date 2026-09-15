@@ -414,7 +414,7 @@ export function AssignmentDemo() {
         body: JSON.stringify({
           studentSessionId,
           capabilityToken,
-          generateReport: true,
+          generateReport: false,
         }),
       });
       const evidenceData = await evidenceResponse.json();
@@ -422,6 +422,25 @@ export function AssignmentDemo() {
         throw new Error(evidenceData.error || "AI_thena could not load the evidence.");
       }
       setEvidenceSnapshot(evidenceData as EvidenceSnapshot);
+
+      void fetch("/api/demo/evidence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentSessionId,
+          capabilityToken,
+          generateReport: true,
+        }),
+      })
+        .then(async (reportResponse) => {
+          if (!reportResponse.ok) return;
+          const reportData = await reportResponse.json();
+          setEvidenceSnapshot(reportData as EvidenceSnapshot);
+        })
+        .catch(() => {
+          // The persisted evidence already shown remains authoritative if the
+          // optional narrative brief cannot be generated.
+        });
     } catch (snapshotError) {
       setEvidenceError(
         snapshotError instanceof Error

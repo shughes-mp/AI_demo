@@ -106,15 +106,23 @@ test("the interactive demo uses real AI_thena services without a disguised fallb
     new URL("../src/app/api/demo/start/route.ts", import.meta.url),
     "utf8"
   );
+  const endRoute = readFileSync(
+    new URL("../src/app/api/end-session/route.ts", import.meta.url),
+    "utf8"
+  );
 
   assert.match(component, /fetch\("\/api\/demo\/opening"/);
   assert.match(component, /fetch\("\/api\/chat"/);
   assert.match(component, /fetch\("\/api\/end-session"/);
   assert.match(component, /fetch\("\/api\/demo\/evidence"/);
+  assert.match(component, /generateReport: false/);
+  assert.match(component, /generateReport: true/);
   assert.doesNotMatch(component, /Guided fallback/i);
   assert.doesNotMatch(component, /buildCoachResponse/);
   assert.match(startRoute, /mode: "unavailable"/);
   assert.doesNotMatch(startRoute, /mode: "guided"/);
+  assert.match(endRoute, /learnerTurnCount < 3/);
+  assert.match(endRoute, /validateLearnerSummary/);
 });
 
 test("each live demo run is isolated and separates readable instructions from protected work", () => {
