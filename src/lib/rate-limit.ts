@@ -9,6 +9,7 @@ type RateLimitOptions = {
   scope: string;
   limit: number;
   windowMs: number;
+  identifier?: string;
 };
 
 const globalForRateLimit = globalThis as unknown as {
@@ -19,7 +20,14 @@ const entries =
   globalForRateLimit.aiThenaRateLimits ?? new Map<string, RateLimitEntry>();
 globalForRateLimit.aiThenaRateLimits = entries;
 
-function requestFingerprint(request: Request) {
+function requestFingerprint(request: Request, identifier?: string) {
+  if (identifier?.trim()) {
+    return createHash("sha256")
+      .update(`explicit:${identifier.trim()}`)
+      .digest("hex")
+      .slice(0, 24);
+  }
+
   const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const source =
     forwardedFor ||
@@ -41,7 +49,7 @@ export function checkRateLimit(request: Request, options: RateLimitOptions) {
   const now = Date.now();
   cleanupExpiredEntries(now);
 
-  const key = `${options.scope}:${requestFingerprint(request)}`;
+  const key = `${options.scope}:${requestFingerprint(request, options.identifier)}`;
   const current = entries.get(key);
   const entry =
     !current || current.resetAt <= now

@@ -1,12 +1,19 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
 const isInstructorPage = createRouteMatcher(["/instructor(.*)"]);
 
-export default clerkMiddleware(async (auth: any, request: any) => {
-  if (isInstructorPage(request)) {
-    await auth.protect();
-  }
+const protectInstructorPages = clerkMiddleware(async (auth) => {
+  await auth.protect();
 });
+
+export default function proxy(request: NextRequest, event: NextFetchEvent) {
+  if (!isInstructorPage(request)) {
+    return NextResponse.next();
+  }
+
+  return protectInstructorPages(request, event);
+}
 
 export const config = {
   matcher: [

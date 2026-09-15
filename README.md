@@ -8,6 +8,14 @@ The current application covers the roadmap through Phase 8.5: instructor setup, 
 
 [Open the live prototype](https://aithena-learning.vercel.app/)
 
+For a no-login, preconfigured illustration of assignment coaching and formative
+evidence, open `/demo`. Each interactive run provisions an isolated AI_thena
+session and uses the real model, source-grounding, assessment-protection,
+adaptive-support, diagnostic, summary, and teaching-brief paths. The separate
+pre-recorded example remains available for a predictable meeting walkthrough.
+If no model key is configured, the demo reports that limitation explicitly
+rather than substituting scripted coaching.
+
 Learners work through assigned material in a guided Socratic dialogue that treats the course readings as its primary reference while allowing clearly identified broader context when useful. As learners respond, AI_thena creates traceable evidence about reasoning, possible misunderstandings, confidence, progress, and next teaching moves.
 
 It is not just a chatbot or an automated grader. It is a learning conversation for students, an auditable evidence-review environment for instructors, and a formative signal for programs that care about how learners think.

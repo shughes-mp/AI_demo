@@ -77,13 +77,6 @@ function hasCycle(mapValue: { concepts: Array<{ id: string; prerequisites: strin
 }
 
 export async function POST(req: Request) {
-  const rateLimit = checkRateLimit(req, {
-    scope: "learner-chat",
-    limit: 30,
-    windowMs: 60 * 1000,
-  });
-  if (!rateLimit.allowed) return rateLimitExceededResponse(rateLimit);
-
   try {
     await ensureDatabaseReady();
 
@@ -99,6 +92,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    const rateLimit = checkRateLimit(req, {
+      scope: "learner-chat-session",
+      identifier: payload.studentSessionId,
+      limit: 30,
+      windowMs: 60 * 1000,
+    });
+    if (!rateLimit.allowed) return rateLimitExceededResponse(rateLimit);
 
     const studentSessionId = payload.studentSessionId;
     const incomingMessages = payload.messages;

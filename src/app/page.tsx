@@ -71,8 +71,14 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
-                href="/instructor"
+                href="/demo"
                 className="minerva-button min-h-[56px] px-8 text-[14px]"
+              >
+                Explore Assignment Demo
+              </Link>
+              <Link
+                href="/instructor"
+                className="minerva-button minerva-button-secondary min-h-[56px] px-8 text-[14px]"
               >
                 Create a Session
               </Link>

@@ -23,6 +23,41 @@ test("rate limiting rejects requests after the configured fixed-window budget", 
   assert.ok(blocked.retryAfterSeconds > 0);
 });
 
+test("learner-session rate limits do not make colleagues on one network share a budget", () => {
+  const request = new Request("https://example.test/api/chat", {
+    headers: { "x-forwarded-for": "192.0.2.42" },
+  });
+  const scope = `session-test-${Date.now()}`;
+
+  assert.equal(
+    checkRateLimit(request, {
+      scope,
+      identifier: "learner-a",
+      limit: 1,
+      windowMs: 60_000,
+    }).allowed,
+    true
+  );
+  assert.equal(
+    checkRateLimit(request, {
+      scope,
+      identifier: "learner-a",
+      limit: 1,
+      windowMs: 60_000,
+    }).allowed,
+    false
+  );
+  assert.equal(
+    checkRateLimit(request, {
+      scope,
+      identifier: "learner-b",
+      limit: 1,
+      windowMs: 60_000,
+    }).allowed,
+    true
+  );
+});
+
 test("learner entry and chat routes enforce request budgets", () => {
   for (const route of [
     "src/app/api/student-sessions/route.ts",
@@ -92,7 +127,7 @@ test("every Prisma model is represented in the Turso bootstrap schema", () => {
   );
   const modelNames = Array.from(
     prismaSchema.matchAll(/^model\s+(\w+)\s+\{/gm),
-    (match: any) => match[1]
+    (match: RegExpExecArray) => match[1]
   );
 
   assert.ok(modelNames.length > 0);
