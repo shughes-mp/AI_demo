@@ -31,6 +31,12 @@ export function determineNextHintLadderRung(
 const HELP_REQUEST_PATTERN =
   /\b(?:just\s+)?(?:tell|give|show)\s+me\s+(?:the\s+)?answer\b|\b(?:i\s+)?(?:do not|don't|dont)\s+know\b|\bi(?:'m| am)\s+stuck\b|\bhelp\s+me\b|\bwhat(?:'s| is)\s+the\s+answer\b/i;
 
+const ORIENTATION_REQUEST_PATTERN =
+  /\b(?:understand|explain|clarify|summari[sz]e|remind)\b.{0,60}\b(?:assignment|instructions?|requirements?|rubric|learning outcomes?|skills?)\b|\bwhat\b.{0,40}\b(?:need to (?:do|produce|submit)|skills? (?:are|am) (?:expected|required))\b/i;
+
+const FOUNDATIONAL_CLARIFICATION_PATTERN =
+  /\b(?:what (?:is|are|does)|define|explain|meaning of|not (?:sure|clear))\b.{0,70}\b(?:complex social system|complex|complicated|system ?analysis|emergent propert(?:y|ies)|agent|attribute|micro|meso|macro)\b/i;
+
 export function isHelpRequest(value: string): boolean {
   return HELP_REQUEST_PATTERN.test(value);
 }
@@ -47,8 +53,18 @@ export function buildLearnerResponseSupportInstruction(
 ): string {
   const words = learnerMessage.trim().split(/\s+/).filter(Boolean);
   const lines: string[] = [];
+  const orientationRequest = ORIENTATION_REQUEST_PATTERN.test(learnerMessage);
+  const foundationalClarification = FOUNDATIONAL_CLARIFICATION_PATTERN.test(learnerMessage);
 
-  if (isHelpRequest(learnerMessage)) {
+  if (orientationRequest) {
+    lines.push(
+      "The learner is asking for factual orientation, not asking you to perform the assessment. Answer directly from the supplied assignment source: concisely map the deliverable, stages, assessed learning outcomes, and critical constraints they asked about. Then ask one short question that checks or personalizes their understanding. Do not require a prior assignment attempt before giving this orientation."
+    );
+  } else if (foundationalClarification) {
+    lines.push(
+      "The learner is asking for a foundational clarification. Give a concise plain-language explanation, distinguish it from a likely non-example or nearby concept, then ask the learner to apply the distinction to a candidate of their own. Do not withhold the definition pending a prior attempt."
+    );
+  } else if (isHelpRequest(learnerMessage)) {
     lines.push(
       `The learner is asking for help${helpRequestCount > 1 ? " again" : ""}. Follow the current productive-struggle rung exactly; do not restart the ladder or jump straight to an answer.`
     );

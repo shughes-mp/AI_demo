@@ -50,6 +50,25 @@ test("repeated help requests are detected without treating every short answer as
   );
 });
 
+test("assignment orientation and foundational definitions are answered before productive struggle", () => {
+  const orientation = buildLearnerResponseSupportInstruction(
+    "Help me understand the assignment instructions and the skills I need.",
+    1
+  );
+  assert.match(orientation, /factual orientation/i);
+  assert.match(orientation, /answer directly/i);
+  assert.match(orientation, /do not require a prior assignment attempt/i);
+  assert.doesNotMatch(orientation, /follow the current productive-struggle rung/i);
+
+  const definition = buildLearnerResponseSupportInstruction(
+    "Can you explain what an emergent property is?",
+    0
+  );
+  assert.match(definition, /foundational clarification/i);
+  assert.match(definition, /plain-language explanation/i);
+  assert.match(definition, /non-example|nearby concept/i);
+});
+
 test("long superficial responses are narrowed to one claim and its support", () => {
   const response = Array.from({ length: 125 }, () => "idea").join(" ");
   assert.match(
