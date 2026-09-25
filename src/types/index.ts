@@ -1,4 +1,4 @@
-// Shared TypeScript types for the AI_thena application
+// Shared TypeScript types for the AI_demo application
 
 export type SessionPurpose =
   | "pre_class"

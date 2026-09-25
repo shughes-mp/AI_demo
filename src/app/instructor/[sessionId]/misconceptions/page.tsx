@@ -393,7 +393,7 @@ export default function MisconceptionDashboardPage() {
                   {getSessionPurposeOption(sessionPurpose).shortLabel}
                 </span>
                 <p className="max-w-[42rem] text-[15px] leading-7 text-[var(--dim-grey)]">
-                  Review patterns AI_thena found in learner dialogue, decide which need class discussion, and turn them into active learning moves.
+                  Review patterns AI_demo found in learner dialogue, decide which need class discussion, and turn them into active learning moves.
                 </p>
               </div>
             </div>

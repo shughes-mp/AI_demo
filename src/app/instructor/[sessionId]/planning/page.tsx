@@ -458,7 +458,7 @@ export default function SessionPlanningPage() {
               <label className="block">
                 <span className="minerva-label">Opening question</span>
                 <span className="mt-1 block text-xs text-[var(--dim-grey)]">
-                  The first prior-knowledge question AI_thena should ask.
+                  The first prior-knowledge question AI_demo should ask.
                 </span>
                 <textarea
                   value={data.plan.openingQuestion}

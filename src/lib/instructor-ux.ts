@@ -78,7 +78,7 @@ export function getInstructorWorkspacePhases(sessionId: string): InstructorWorks
           label: INSTRUCTOR_LABELS.evidenceQuestions,
           href: `/instructor/${sessionId}#evidence-questions`,
           phase: "prepare",
-          description: "Choose the questions AI_thena will listen for.",
+          description: "Choose the questions AI_demo will listen for.",
         },
         {
           key: "preview",
@@ -210,7 +210,7 @@ export const UX_SMOKE_TEST_GATE = [
   "Can a first-time instructor create a usable session in under five minutes?",
   "Can they tell what is required vs optional?",
   "Can they preview the learner experience before sharing?",
-  "Can they understand what AI_thena found without internal terminology?",
+  "Can they understand what AI_demo found without internal terminology?",
   "Can they tell what to do next after learners respond?",
   "Can they inspect evidence if they want to?",
   "Can they ignore advanced details safely?",

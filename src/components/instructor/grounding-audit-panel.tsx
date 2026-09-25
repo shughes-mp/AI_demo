@@ -85,7 +85,7 @@ export function GroundingAuditPanel({ sessionId }: { sessionId: string }) {
       <section>
         <h2 className="font-serif text-3xl text-[var(--charcoal)]">Source-use details</h2>
         <div className="mt-4 space-y-4">
-          {data.groundings.length === 0 ? <Empty text="No source-use details yet. Tutor responses will appear here after learners interact with the session and AI_thena can inspect whether responses used the reading, broader context, or neither." /> : data.groundings.map((item: any) => (
+          {data.groundings.length === 0 ? <Empty text="No source-use details yet. Tutor responses will appear here after learners interact with the session and AI_demo can inspect whether responses used the reading, broader context, or neither." /> : data.groundings.map((item: any) => (
             <article key={item.id} className="minerva-card p-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-[var(--charcoal)]">{item.learnerName}</p>

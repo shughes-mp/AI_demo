@@ -255,7 +255,7 @@ export default function ReportPage() {
       const disposition = response.headers.get("Content-Disposition") ?? "";
       const filename =
         disposition.match(/filename="?([^";]+)"?/i)?.[1] ??
-        "ai-thena-teaching-brief.pdf";
+        "ai-demo-teaching-brief.pdf";
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = objectUrl;
@@ -537,7 +537,7 @@ export default function ReportPage() {
               Learning outcome evidence
             </h3>
             <p className="mt-3 max-w-[44rem] text-sm text-[var(--dim-grey)]">
-              These signals are formative and AI-generated. They reflect evidence observed during the AI_thena
+              These signals are formative and AI-generated. They reflect evidence observed during the AI_demo
               session and should be reviewed by the instructor before informing any grading decisions.
             </p>
             <div className="mt-8 space-y-8">

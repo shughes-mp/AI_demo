@@ -22,7 +22,7 @@ export default async function GroundingAuditPage({
         <header className="mb-8 mt-5">
           <h1 className="font-serif text-[44px] leading-none tracking-[-0.03em] text-[var(--charcoal)]">{INSTRUCTOR_LABELS.grounding}</h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--dim-grey)]">
-            Check whether AI_thena used the assigned reading responsibly, where it added broader explanation, and when protected assessment material changed the coaching path.
+            Check whether AI_demo used the assigned reading responsibly, where it added broader explanation, and when protected assessment material changed the coaching path.
           </p>
           <div className="mt-6">
             <InstructorWorkspaceNavigation sessionId={sessionId} />

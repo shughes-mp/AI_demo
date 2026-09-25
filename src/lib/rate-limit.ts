@@ -13,12 +13,12 @@ type RateLimitOptions = {
 };
 
 const globalForRateLimit = globalThis as unknown as {
-  aiThenaRateLimits?: Map<string, RateLimitEntry>;
+  aiDemoRateLimits?: Map<string, RateLimitEntry>;
 };
 
 const entries =
-  globalForRateLimit.aiThenaRateLimits ?? new Map<string, RateLimitEntry>();
-globalForRateLimit.aiThenaRateLimits = entries;
+  globalForRateLimit.aiDemoRateLimits ?? new Map<string, RateLimitEntry>();
+globalForRateLimit.aiDemoRateLimits = entries;
 
 function requestFingerprint(request: Request, identifier?: string) {
   if (identifier?.trim()) {

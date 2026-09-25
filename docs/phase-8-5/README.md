@@ -34,7 +34,7 @@ Phase 8.5 is a product-coherence pass. It does not add new AI capability. It mak
 - Can they create a usable session in under five minutes?
 - Can they preview the learner experience before sharing?
 - Can they tell what to do next after setup, learner activity, evidence review, and brief generation?
-- Can they understand the main teaching signal without internal AI_thena terminology?
+- Can they understand the main teaching signal without internal AI_demo terminology?
 - Can they inspect source evidence and technical details if desired?
 - Can they safely ignore advanced details?
 - Can they export a useful teaching brief?

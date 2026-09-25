@@ -89,7 +89,7 @@ export function buildLearnerSummaryPrompt(input: {
   transcript: string;
   unresolvedMisconceptions: Array<{ topicThread: string; description: string }>;
 }): string {
-  return `The learner has completed a guided AI_thena learning session. Create a concise formative summary from the transcript below.
+  return `The learner has completed a guided AI_demo learning session. Create a concise formative summary from the transcript below.
 
 The summary is descriptive learning support, not a grade, score, mastery judgment, or prediction. Use only evidence visible in the transcript. If evidence is limited or mixed, say so plainly. Write in second person and use exactly these markdown sections:
 
@@ -186,7 +186,7 @@ ${lastPersistedQuestion(messages)}
 ## About this summary
 This AI-generated summary may be incomplete or inaccurate; you can add a reflection or correction before your instructor reviews it.
 
-AI_thena withheld a stronger progress claim because the generated summary did not meet its transcript-validation rules.`;
+AI_demo withheld a stronger progress claim because the generated summary did not meet its transcript-validation rules.`;
 }
 
 export function validateLearnerSummary(
@@ -201,7 +201,7 @@ export function validateLearnerSummary(
     (heading, index) => generated.indexOf(heading) >= 0 &&
       (index === 0 || generated.indexOf(heading) > generated.indexOf(SUMMARY_HEADINGS[index - 1]))
   );
-  const inventedDialogue = /(?:^|\n)\s*(?:Student|Learner|Tutor|AI_thena)\s*:/i.test(generated);
+  const inventedDialogue = /(?:^|\n)\s*(?:Student|Learner|Tutor|AI_demo)\s*:/i.test(generated);
 
   if (learnerTurns < 3 || firstHeading < 0 || prefix || !allHeadingsPresent || inventedDialogue) {
     return conservativeLearnerSummary(messages, unresolvedMisconceptions);

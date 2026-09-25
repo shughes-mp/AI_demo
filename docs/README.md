@@ -1,4 +1,4 @@
-# AI_thena Product And Implementation Documents
+# AI_demo Product And Implementation Documents
 
 ## Phase 0: Baseline
 
@@ -42,6 +42,6 @@
 
 ## Governing Planning Documents
 
-- [Higher-rigor recommendations](../AI_thena_higher_rigor_recommendations.md)
-- [Implementation roadmap](../AI_thena_implementation_roadmap.md)
+- [Higher-rigor recommendations](../AI_demo_higher_rigor_recommendations.md)
+- [Implementation roadmap](../AI_demo_implementation_roadmap.md)
 

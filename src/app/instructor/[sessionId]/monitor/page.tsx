@@ -170,7 +170,7 @@ export default function StudentMonitorPage() {
                   {getSessionPurposeOption(sessionPurpose).shortLabel}
                 </span>
                 <p className="text-[15px] leading-7 text-[var(--dim-grey)]">
-                  See who joined, whether anyone may need attention, and the evidence AI_thena found in their dialogue.
+                  See who joined, whether anyone may need attention, and the evidence AI_demo found in their dialogue.
                 </p>
               </div>
             </div>

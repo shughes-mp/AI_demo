@@ -123,7 +123,7 @@ IMPORTANT: Format as a structured list, one topic per line:
 function buildReportSystemPrompt(sessionPurpose: string): string {
   const framing = getReportPurposeFraming(sessionPurpose);
 
-  return `You generate instructor teaching briefs from AI_thena learning sessions. ${framing.overallFrame} Write in professional, direct prose. Use these section headers exactly:
+  return `You generate instructor teaching briefs from AI_demo learning sessions. ${framing.overallFrame} Write in professional, direct prose. Use these section headers exactly:
 
 SESSION SNAPSHOT
 - Session name, number of students, total exchanges, session purpose. One sentence framing how the session went overall - momentum, not just numbers.

@@ -18,7 +18,7 @@ const serif = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "AI_thena",
+  title: "AI_demo",
   description:
     "An AI teaching, learning, and formative assessment tool for reading-based courses.",
 };

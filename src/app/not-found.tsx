@@ -9,7 +9,7 @@ export default function NotFound() {
         </p>
         <h1 className="font-serif text-5xl leading-tight">This link has wandered off.</h1>
         <p className="mt-5 text-base leading-7 text-[#67615a]">
-          Check the address, or return to AI_thena and begin again.
+          Check the address, or return to AI_demo and begin again.
         </p>
         <Link
           href="/"

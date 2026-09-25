@@ -21,7 +21,7 @@ export default async function EvidenceReviewPage({
         <header className="mb-8 mt-5">
           <h1 className="font-serif text-[44px] leading-none tracking-[-0.03em] text-[var(--charcoal)]">{INSTRUCTOR_LABELS.evidence}</h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--dim-grey)]">
-            Start with learner claims that may need your judgment. Open the evidence and technical details only when you want to inspect how AI_thena reached the signal. These signals are not grades or final judgments.
+            Start with learner claims that may need your judgment. Open the evidence and technical details only when you want to inspect how AI_demo reached the signal. These signals are not grades or final judgments.
           </p>
           <div className="mt-6">
             <InstructorWorkspaceNavigation sessionId={sessionId} />

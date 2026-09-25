@@ -69,7 +69,7 @@ function SkillMarkdown({ children }: { children: string }) {
 }
 
 type EvidenceSnapshot = {
-  source: "live_ai_thena";
+  source: "live_ai_demo";
   generatedAt: string;
   learner: {
     name: string;
@@ -436,7 +436,7 @@ export function AssignmentDemo() {
         if (!response.ok) {
           const failure = await response.json().catch(() => ({}));
           throw new Error(
-            failure.error?.replace(/AI_thena(?:’s)?/g, "The AI coach") ||
+            failure.error?.replace(/AI_demo(?:’s)?/g, "The AI coach") ||
               "The AI coach could not respond. Please try again."
           );
         }

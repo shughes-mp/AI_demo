@@ -1,15 +1,15 @@
-# AI_thena
+# AI_demo
 
-AI_thena helps instructors turn reading-based learner dialogue into usable formative evidence and practical teaching next steps.
+AI_demo helps instructors turn reading-based learner dialogue into usable formative evidence and practical teaching next steps.
 
 It is built for courses where interpretation, reasoning, and application matter. Instructors upload course readings, define learning goals, preview what learners will experience, share a link, and then review source-linked evidence, learner activity, and teaching briefs after students work with the tutor.
 
 The current application covers the roadmap through Phase 8.5: instructor setup, learner dialogue, evidence provenance and review, source-use checks, assessment protection, learner reflection, exportable teaching briefs, instructor-controlled teaching moves, pre-session planning with a faithful learner preview, and a calmer instructor workflow built around four required setup cards, one merged preview-and-share launch step, and collapsed optional planning and safeguard sections.
 
-[Open the live prototype](https://aithena-learning.vercel.app/)
+[Open the live prototype](https://ai-demo-learning.vercel.app/)
 
 For a no-login, preconfigured illustration of assignment coaching and formative
-evidence, open `/demo`. Each interactive run provisions an isolated AI_thena
+evidence, open `/demo`. Each interactive run provisions an isolated AI_demo
 session and uses the real model, source-grounding, assessment-protection,
 adaptive-support, diagnostic, summary, and teaching-brief paths. The separate
 pre-recorded example remains available for a predictable meeting walkthrough.
@@ -18,13 +18,13 @@ skills, system selection, or their own work; no system is predetermined.
 If no model key is configured, the demo reports that limitation explicitly
 rather than substituting scripted coaching.
 
-Learners work through assigned material in a guided Socratic dialogue that treats the course readings as its primary reference while allowing clearly identified broader context when useful. As learners respond, AI_thena creates traceable evidence about reasoning, possible misunderstandings, confidence, progress, and next teaching moves.
+Learners work through assigned material in a guided Socratic dialogue that treats the course readings as its primary reference while allowing clearly identified broader context when useful. As learners respond, AI_demo creates traceable evidence about reasoning, possible misunderstandings, confidence, progress, and next teaching moves.
 
 It is not just a chatbot or an automated grader. It is a learning conversation for students, an auditable evidence-review environment for instructors, and a formative signal for programs that care about how learners think.
 
 ## At a Glance
 
-| Function | What AI_thena Does |
+| Function | What AI_demo Does |
 | --- | --- |
 | Teaching | Helps instructors review learner progress, possible misunderstandings, readiness patterns, source evidence, teaching moves, and proportionate Observer/Guide/Conductor pivots. |
 | Learning | Guides learners through source-first dialogue with Socratic questions, confidence checks, proportional help, and reflection. |
@@ -32,11 +32,11 @@ It is not just a chatbot or an automated grader. It is a learning conversation f
 
 ## Start Here: Instructor Workflow
 
-AI_thena is organized around the natural teaching timeline:
+AI_demo is organized around the natural teaching timeline:
 
 1. **Task**: choose where the session sits in the learning cycle and define the learning outcomes you want to assess.
 2. **Materials**: upload the reading or source material learners should use as their primary reference.
-3. **Questions**: add the core evidence questions AI_thena should listen for.
+3. **Questions**: add the core evidence questions AI_demo should listen for.
 4. **Preview & share**: preview the learner experience, then reveal and copy the learner link only when setup is ready.
 5. **Watch learner activity**: see who joined, who may need attention, and what happened in the conversation.
 6. **Review learner evidence**: inspect claims that may need instructor judgment, with source passages available behind "Show evidence."
@@ -58,7 +58,7 @@ Required setup stays visible through the top progress cards. Teaching context, s
 10. Instructors inspect citations and provenance, then approve, revise, reject, or supersede consequential evidence before using it.
 11. Deterministic rules may suggest Observer, Guide, or Conductor; the instructor decides whether to accept, change, reject, or record the move.
 
-AI_thena can support different moments in the learning cycle:
+AI_demo can support different moments in the learning cycle:
 
 - `Pre-class`: check comprehension and readiness before class.
 - `In-class Prep`: activate retrieval before an activity.
@@ -119,9 +119,9 @@ Instructors can:
 - inspect evidence-linked Observer, Guide, and Conductor pivots during live review and in teaching briefs;
 - accept, change, reject, edit, record, and evaluate a facilitation move without automatic intervention.
 
-## What AI_thena Produces
+## What AI_demo Produces
 
-AI_thena turns learner conversations into instructor-facing evidence:
+AI_demo turns learner conversations into instructor-facing evidence:
 
 - learner progress summaries;
 - confidence checks;
@@ -166,7 +166,7 @@ Consequential signals retain learner-message and source-passage provenance. AI-g
 
 Create a local `.env.local` file inside the app folder.
 
-For local development, set `AI_THENA_USE_LOCAL_DATABASE=1` to guarantee that the app runtime uses `file:./prisma/dev.db`, even when Turso variables are also present. Prisma CLI commands use `LOCAL_DATABASE_URL`, then `DATABASE_URL`, then the fallback configured in `prisma.config.ts`.
+For local development, set `AI_DEMO_USE_LOCAL_DATABASE=1` to guarantee that the app runtime uses `file:./prisma/dev.db`, even when Turso variables are also present. Prisma CLI commands use `LOCAL_DATABASE_URL`, then `DATABASE_URL`, then the fallback configured in `prisma.config.ts`.
 
 ```bash
 ANTHROPIC_API_KEY=your_anthropic_api_key
@@ -174,7 +174,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 LOCAL_DATABASE_URL=file:./prisma/dev.db
 DATABASE_URL=file:./prisma/dev.db
 # Set to 1 to force local SQLite when Turso variables are also present.
-AI_THENA_USE_LOCAL_DATABASE=1
+AI_DEMO_USE_LOCAL_DATABASE=1
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key
 CLERK_SECRET_KEY=sk_test_your_secret_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
@@ -242,7 +242,7 @@ Current status:
 
 ## Database and Deployment
 
-AI_thena uses two database modes:
+AI_demo uses two database modes:
 
 - Local development: `better-sqlite3` with `prisma/dev.db`.
 - Production: Turso Cloud through Prisma's libsql adapter.
@@ -250,7 +250,7 @@ AI_thena uses two database modes:
 Important details:
 
 - Prisma CLI schema commands use `LOCAL_DATABASE_URL`, `DATABASE_URL`, or the fallback in `prisma.config.ts`.
-- Local app runtime uses the Better SQLite adapter when `AI_THENA_USE_LOCAL_DATABASE=1` or no Turso/libsql URL is present.
+- Local app runtime uses the Better SQLite adapter when `AI_DEMO_USE_LOCAL_DATABASE=1` or no Turso/libsql URL is present.
 - Production runtime uses `TURSO_DATABASE_URL` or a `DATABASE_URL` that starts with `libsql://`.
 - Production without a Turso/libsql URL throws a configuration error.
 - The app includes runtime Turso bootstrap SQL for production tables, indexes, and incremental schema upgrades.
@@ -307,7 +307,7 @@ The implementation roadmap is deployed and operationally verified through Phase 
 - **Phase 8:** faithful learner preview, deterministic session-design warnings, participation planning, and editable Guide-first anticipated pivots delivered into the real learner flow.
 - **Phase 8.5:** instructor workflow, progressive disclosure, clearer labels, calmer empty states, four-card required setup architecture, merged preview/share launch step, required/recommended/optional setup separation, preview-before-share gating, recall-only question cautions, hidden optional trust checks, and accessibility-oriented UI cleanup.
 
-See the [implementation roadmap](AI_thena_implementation_roadmap.md) and [phase documentation](docs/README.md) for acceptance gates, limitations, and verification details.
+See the [implementation roadmap](AI_demo_implementation_roadmap.md) and [phase documentation](docs/README.md) for acceptance gates, limitations, and verification details.
 
 Production smoke testing has confirmed instructor authentication, real-session evidence review, stale-brief protection, owner/editor brief refresh, provenance-rich PDF export, the complete Phase 7 facilitation workflow, and Phase 8 planning preview. Authenticated sessions exercised Observer, Guide, and Conductor recommendations; instructor acceptance, override, rejection rationale, edited phrasing, move recording, and helpfulness; viewer read-only enforcement; desktop/mobile keyboard use; color-independent labels; refreshed teaching-brief/PDF output; learner preview; generated likely stuck points; learner-facing planned opening language; learner activity; source-use checks; and teaching brief integration. The previously exposed Anthropic credential was revoked and replaced.
 

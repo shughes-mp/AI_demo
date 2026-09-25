@@ -4,7 +4,7 @@ const steps = [
   {
     step: "01",
     title: "Set the learning purpose",
-    body: "Choose when learners will use AI_thena, define the outcomes you want evidence for, and upload the source materials it should stay grounded in.",
+    body: "Choose when learners will use AI_demo, define the outcomes you want evidence for, and upload the source materials it should stay grounded in.",
   },
   {
     step: "02",
@@ -29,7 +29,7 @@ const capabilities = [
     label: "Misunderstanding Signals",
     accent: "var(--olive)",
     description:
-      "Review patterns AI_thena found in learner dialogue, with evidence excerpts and space for instructor judgment.",
+      "Review patterns AI_demo found in learner dialogue, with evidence excerpts and space for instructor judgment.",
   },
   {
     label: "Learning Outcome Evidence",
@@ -47,7 +47,7 @@ export default function HomePage() {
           <div className="hidden md:block" />
           <div className="px-4 py-5 md:px-8">
             <p className="text-[12px] font-extrabold tracking-[0.01em]">
-              AI_thena
+              AI_demo
             </p>
           </div>
           <div className="px-4 py-5 md:px-8 md:text-right">
@@ -65,7 +65,7 @@ export default function HomePage() {
               Evidence-led teaching for every stage of the learning cycle.
             </h1>
             <p className="body-copy mt-6 max-w-[38rem]">
-              AI_thena helps instructors turn learner dialogue into formative
+              AI_demo helps instructors turn learner dialogue into formative
               evidence before, during, or after class - without replacing
               instructor judgment.
             </p>
@@ -157,7 +157,7 @@ export default function HomePage() {
                 </p>
                 <p className="body-copy muted-copy mt-5 max-w-[36rem]">
                   Whether it&apos;s pre-class preparation, in-class reflection,
-                  or after-class transfer, AI_thena gives you reviewable
+                  or after-class transfer, AI_demo gives you reviewable
                   evidence on learner strengths, gaps, and next teaching moves.
                 </p>
               </div>

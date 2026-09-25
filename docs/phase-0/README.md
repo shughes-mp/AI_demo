@@ -2,7 +2,7 @@
 
 Status: Complete as of 2026-06-18.
 
-This directory records the implementation baseline for the AI_thena higher-rigor roadmap. It is descriptive, not a claim that the identified behavior is valid or production-ready.
+This directory records the implementation baseline for the AI_demo higher-rigor roadmap. It is descriptive, not a claim that the identified behavior is valid or production-ready.
 
 ## Deliverables
 
@@ -23,7 +23,7 @@ This directory records the implementation baseline for the AI_thena higher-rigor
 
 ## Baseline Conclusion
 
-AI_thena has a substantial functional prototype: instructors can configure sessions and sources, learners can complete guided conversations, diagnostics run after exchanges, and instructors can view reports, patterns, recommendations, and PDF exports.
+AI_demo has a substantial functional prototype: instructors can configure sessions and sources, learners can complete guided conversations, diagnostics run after exchanges, and instructors can view reports, patterns, recommendations, and PDF exports.
 
 The main gap is epistemic infrastructure. Important outputs are generated from model classifications, heuristics, prose, and JSON-encoded strings without first-class evidence citations, prompt versioning, review provenance, or complete authorization. The visible language has moved toward formative evidence, but the persisted model and several prompts still encode stronger concepts such as mastery, assessment, engagement diagnosis, severity, and scoring.
 

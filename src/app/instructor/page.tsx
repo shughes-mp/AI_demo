@@ -58,7 +58,7 @@ export default function InstructorCreatePage() {
             <p className="body-copy muted-copy mt-6 max-w-[25rem]">
               Name your session and we&apos;ll take you to the workspace where
               you can upload sources, define outcomes, protect assessment
-              materials, and choose when learners will use AI_thena.
+              materials, and choose when learners will use AI_demo.
             </p>
             <div className="mt-8">
               <StepIndicator currentStep={1} />

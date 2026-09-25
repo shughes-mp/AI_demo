@@ -1,10 +1,10 @@
-# AI_thena Evidence Contract
+# AI_demo Evidence Contract
 
 Contract version: `evidence-1.0.0`
 
 ## Purpose
 
-This contract defines what counts as evidence, how AI_thena may infer from it, how uncertainty is represented, and what instructors must be able to review.
+This contract defines what counts as evidence, how AI_demo may infer from it, how uncertainty is represented, and what instructors must be able to review.
 
 ## Epistemic Layers
 
@@ -234,18 +234,18 @@ It must not be created for:
 - Disagreement with an interpretation when the source permits alternatives
 - Off-topic remarks without a false content claim
 
-Resolution requires new learner evidence demonstrating corrected understanding. Repeating AI_thena's words is insufficient by itself.
+Resolution requires new learner evidence demonstrating corrected understanding. Repeating AI_demo's words is insufficient by itself.
 
 ## Interaction Concern Contract
 
-AI_thena may record observations such as:
+AI_demo may record observations such as:
 
 - No response recorded for a defined period
 - Repeated one-word responses
 - Repeated response unrelated to the evidence question
 - Explicit request to stop
 
-AI_thena must not infer as fact:
+AI_demo must not infer as fact:
 
 - Motivation
 - Effort
@@ -294,7 +294,7 @@ Every action records:
 - New state
 - Rationale or optional note
 
-AI_thena must never overwrite an instructor decision silently. New model output creates a new version or superseding signal.
+AI_demo must never overwrite an instructor decision silently. New model output creates a new version or superseding signal.
 
 ## Display Contract
 
@@ -313,7 +313,7 @@ Compact views may summarize these fields but must provide a direct drill-down.
 
 ## Grading Boundary
 
-AI_thena does not produce grades.
+AI_demo does not produce grades.
 
 Evidence levels may inform instructor judgment only when:
 

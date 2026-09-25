@@ -388,7 +388,7 @@ export function FacilitationPivotPanel({
             Recommended pivots
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--dim-grey)]">
-            AI_thena suggests how much instructor intervention appears proportionate. It never acts automatically: inspect the evidence, decide what to do, and step back when learners can continue.
+            AI_demo suggests how much instructor intervention appears proportionate. It never acts automatically: inspect the evidence, decide what to do, and step back when learners can continue.
           </p>
         </div>
         {canEdit ? (

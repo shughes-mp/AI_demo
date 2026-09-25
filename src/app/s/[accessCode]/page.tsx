@@ -107,7 +107,7 @@ export default async function StudentEntryPage({ params }: PageProps) {
               <ul className="space-y-2.5">
                 {[
                   "Start by explaining what you already know about this topic, in your own words.",
-                  "AI_thena will ask follow-up questions to deepen your thinking. It will not simply hand you the answers.",
+                  "AI_demo will ask follow-up questions to deepen your thinking. It will not simply hand you the answers.",
                   "It begins with your instructor's materials and may add clearly identified broader context when useful.",
                   "Your instructor may review the conversation formatively. This is learning support, not hidden automated grading.",
                   "Take your time. Thoughtful reasoning matters more than speed.",

@@ -1,4 +1,4 @@
-# AI_thena Governance Contract
+# AI_demo Governance Contract
 
 Contract version: `governance-1.0.0`
 
@@ -46,7 +46,7 @@ It is a product and engineering baseline, not jurisdiction-specific legal advice
 
 ## Data Minimization
 
-AI_thena must:
+AI_demo must:
 
 - Collect only data needed for the stated learning purpose.
 - Avoid storing raw model reasoning not required for review or debugging.
@@ -59,7 +59,7 @@ AI_thena must:
 
 Before participation, learners must be told:
 
-- AI_thena is AI-assisted.
+- AI_demo is AI-assisted.
 - The instructor may review the conversation.
 - The purpose is formative learning evidence.
 - What data is collected.
@@ -116,7 +116,7 @@ Requirements:
 - Do not include protected answers in learner-visible logs, summaries, or exports.
 - Minimize protected text sent to providers.
 - Add adversarial leakage tests.
-- State clearly that AI_thena reduces risk but is not formal exam-security infrastructure.
+- State clearly that AI_demo reduces risk but is not formal exam-security infrastructure.
 - Provide deletion and expiry controls.
 
 ## Model And Provider Data Use
@@ -161,7 +161,7 @@ The following require explicit authorization tests:
 
 ## Prohibited Uses
 
-AI_thena must not support:
+AI_demo must not support:
 
 - Hidden monitoring of learners
 - Automated disciplinary decisions

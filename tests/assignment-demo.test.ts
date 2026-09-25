@@ -97,7 +97,7 @@ test("reviewer feedback preserves zero and missing ratings", () => {
   assert.match(text, /Evidence credibility: Not rated/);
 });
 
-test("the interactive demo uses real AI_thena services without a disguised fallback", () => {
+test("the interactive demo uses real AI_demo services without a disguised fallback", () => {
   const component = readFileSync(
     new URL("../src/app/demo/assignment-demo.tsx", import.meta.url),
     "utf8"
@@ -203,10 +203,10 @@ test("the demo is neutrally branded and renders skill hashtags in a consistent b
   assert.match(component, /text-\[#075dcc\]/);
   assert.match(component, /Assignment support/);
   assert.match(component, /Assignment coach/);
-  assert.doesNotMatch(component, />AI_thena</);
-  assert.doesNotMatch(component, /AI_thena coach|Live AI_thena|AI_thena is/);
-  assert.doesNotMatch(metadata, /AI_thena/);
-  assert.doesNotMatch(demoContent, /Does AI_thena|AI_thena assignment demo feedback/);
+  assert.doesNotMatch(component, />AI_demo</);
+  assert.doesNotMatch(component, /AI_demo coach|Live AI_demo|AI_demo is/);
+  assert.doesNotMatch(metadata, /AI_demo/);
+  assert.doesNotMatch(demoContent, /Does AI_demo|AI_demo assignment demo feedback/);
 });
 
 test("the live learner start routes foundational needs and keeps demo-only probes elsewhere", () => {

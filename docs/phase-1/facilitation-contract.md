@@ -1,10 +1,10 @@
-# AI_thena Facilitation Contract
+# AI_demo Facilitation Contract
 
 Contract version: `facilitation-1.0.0`
 
 ## Purpose
 
-AI_thena may recommend how much instructor control appears proportionate to observed learning conditions. It must preserve student intellectual ownership and instructor authority.
+AI_demo may recommend how much instructor control appears proportionate to observed learning conditions. It must preserve student intellectual ownership and instructor authority.
 
 The framework has three modes:
 
@@ -18,7 +18,7 @@ No mode is inherently superior. Effective facilitation moves among them as condi
 
 > Intervene just enough to restore or deepen productive learning, then release control again.
 
-AI_thena recommends. The instructor decides.
+AI_demo recommends. The instructor decides.
 
 ## Observer
 
@@ -158,7 +158,7 @@ reviewState
 
 ## Diagnosis Before Escalation
 
-Where time permits, AI_thena should suggest a diagnosis question before a stronger intervention.
+Where time permits, AI_demo should suggest a diagnosis question before a stronger intervention.
 
 Examples:
 
@@ -188,7 +188,7 @@ The instructor can:
 - Record whether momentum improved
 - Reject the underlying diagnosis
 
-AI_thena must retain the instructor decision and must not silently regenerate over it.
+AI_demo must retain the instructor decision and must not silently regenerate over it.
 
 ## Model Use
 

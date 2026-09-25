@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function getRemoteDatabaseUrl(): string | undefined {
-  if (process.env.AI_THENA_USE_LOCAL_DATABASE === "1") {
+  if (process.env.AI_DEMO_USE_LOCAL_DATABASE === "1") {
     return undefined;
   }
   if (process.env.TURSO_DATABASE_URL) {

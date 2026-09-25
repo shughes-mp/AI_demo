@@ -66,7 +66,7 @@ export async function GET(
       printBackground: true,
       displayHeaderFooter: true,
       headerTemplate:
-        '<div style="font-size:8px;width:100%;text-align:center;color:#77736b">AI_thena teaching brief</div>',
+        '<div style="font-size:8px;width:100%;text-align:center;color:#77736b">AI_demo teaching brief</div>',
       footerTemplate:
         '<div style="font-size:8px;width:100%;text-align:center;color:#77736b"><span class="pageNumber"></span> / <span class="totalPages"></span></div>',
       margin: { top: "24mm", right: "16mm", bottom: "25mm", left: "16mm" },

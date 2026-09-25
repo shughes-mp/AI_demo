@@ -1,10 +1,10 @@
-# AI_thena Product Contract
+# AI_demo Product Contract
 
 Contract version: `product-1.0.0`
 
 ## Product Definition
 
-AI_thena is an AI-assisted teaching, learning, and formative assessment system for source-grounded learning sessions.
+AI_demo is an AI-assisted teaching, learning, and formative assessment system for source-grounded learning sessions.
 
 It helps:
 
@@ -12,7 +12,7 @@ It helps:
 - Instructors inspect evidence of learner thinking, review provisional AI inferences, identify patterns, and choose proportionate teaching moves.
 - Educational programmes use formative evidence responsibly without converting AI output into an automated grade, diagnosis, or claim of general ability.
 
-AI_thena is not merely a chatbot or AI tutor. It is a human-governed learning evidence system.
+AI_demo is not merely a chatbot or AI tutor. It is a human-governed learning evidence system.
 
 ## Primary Users
 
@@ -50,7 +50,7 @@ This role is required for governed deployment but is not yet implemented.
 
 ## Supported Product Uses
 
-AI_thena may support:
+AI_demo may support:
 
 - Pre-class readiness evidence
 - During-class retrieval and activation
@@ -67,7 +67,7 @@ AI_thena may support:
 
 ## Prohibited Or Unsupported Uses
 
-AI_thena must not be presented or used as:
+AI_demo must not be presented or used as:
 
 - A fully automated grading system
 - A sole basis for high-stakes educational decisions
@@ -78,25 +78,25 @@ AI_thena must not be presented or used as:
 - A hidden learner-surveillance system
 - A mechanism for training external models on learner data without explicit authority
 
-If an institution chooses to use reviewed evidence as one input to grading, the instructor must independently evaluate it under an institutionally approved assessment design. AI_thena itself does not assign the grade.
+If an institution chooses to use reviewed evidence as one input to grading, the instructor must independently evaluate it under an institutionally approved assessment design. AI_demo itself does not assign the grade.
 
 ## Product Claims
 
 ### Permitted Claims
 
-AI_thena may say:
+AI_demo may say:
 
 - “The learner wrote...”
 - “The dialogue contains evidence that...”
 - “Evidence within this session suggests...”
-- “AI_thena identified a possible misunderstanding...”
+- “AI_demo identified a possible misunderstanding...”
 - “This signal may warrant instructor review...”
 - “A Guide move may be proportionate because...”
 - “The instructor approved/revised/rejected this signal.”
 
 ### Prohibited Claims Without Additional Evidence
 
-AI_thena must not say:
+AI_demo must not say:
 
 - “The learner has mastered...”
 - “The learner is disengaged/lazy/unmotivated.”
@@ -108,11 +108,11 @@ AI_thena must not say:
 
 ## Authority Model
 
-AI_thena may observe, organize, infer, and recommend. It does not decide.
+AI_demo may observe, organize, infer, and recommend. It does not decide.
 
 Authority is allocated as follows:
 
-| Action | AI_thena | Instructor | Learner |
+| Action | AI_demo | Instructor | Learner |
 |---|---|---|---|
 | Record dialogue | Yes, with disclosure | Governs session | Participates |
 | Identify provisional signal | Yes | Reviews | May contest where exposed |
@@ -125,19 +125,19 @@ Authority is allocated as follows:
 ## Core Operating Loop
 
 1. Instructor establishes purpose and evidence opportunities.
-2. AI_thena explains the session and data use to the learner.
+2. AI_demo explains the session and data use to the learner.
 3. Learner performs the intellectual work.
-4. AI_thena provides graduated support.
-5. AI_thena records observations and evidence citations.
-6. AI_thena creates provisional inferences with uncertainty.
+4. AI_demo provides graduated support.
+5. AI_demo records observations and evidence citations.
+6. AI_demo creates provisional inferences with uncertainty.
 7. Instructor reviews consequential signals.
-8. AI_thena synthesizes reviewed and unreviewed evidence distinctly.
+8. AI_demo synthesizes reviewed and unreviewed evidence distinctly.
 9. Instructor chooses a teaching response.
 10. Learner receives a formative summary and reflection opportunity.
 
 ## Pedagogical Commitments
 
-AI_thena must prioritize:
+AI_demo must prioritize:
 
 - Productive struggle without abandonment
 - Source-grounded reasoning
@@ -156,7 +156,7 @@ The system must avoid both extremes:
 
 ## Product Success Criteria
 
-AI_thena succeeds only if:
+AI_demo succeeds only if:
 
 - Naive users understand its purpose and limitations.
 - Learners perform more reasoning rather than outsource it.
@@ -170,7 +170,7 @@ AI_thena succeeds only if:
 
 ## Release Constraints
 
-Before real educational deployment involving identifiable learner data, AI_thena requires:
+Before real educational deployment involving identifiable learner data, AI_demo requires:
 
 - Instructor identity and session ownership
 - Authorization for all instructor and learner records

@@ -4,7 +4,7 @@ Status: **Complete (2026-06-19).**
 
 ## Learner orientation
 
-- The learner entry page explains what AI_thena is, the role of instructor-provided materials, the source-first use of broader context, and the expectation that learners explain their thinking.
+- The learner entry page explains what AI_demo is, the role of instructor-provided materials, the source-first use of broader context, and the expectation that learners explain their thinking.
 - It states that the conversation may be reviewed formatively, is not hidden automated grading, and values thoughtful reasoning over speed.
 - It warns that AI-generated summaries may be incomplete or inaccurate and tells learners they can add their own reflection or correction.
 - The same essentials remain available from the expandable orientation panel during chat.

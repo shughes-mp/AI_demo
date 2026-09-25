@@ -160,7 +160,7 @@ export function buildTeachingBriefExportHtml(input: {
     </head>
     <body>
       <header>
-        <p class="eyebrow">AI_thena · Instructor teaching brief</p>
+        <p class="eyebrow">AI_demo · Instructor teaching brief</p>
         <h1>${escapeHtml(input.sessionName)}</h1>
         <p class="meta">${escapeHtml(brief.session.purposeLabel)} · ${countLabel(brief.session.learnerCount, "learner")} · ${countLabel(brief.session.exchangeCount, "exchange")} · Generated ${escapeHtml(generatedAt)} UTC</p>
       </header>

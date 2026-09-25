@@ -177,7 +177,7 @@ export function buildLearnerExperiencePreview(
       ? "The assigned reading is the primary reference. Broader explanations may be added when useful and will be identified separately."
       : "No assigned reading has been uploaded yet, so a source-grounded learner session cannot begin.",
     protectedAssessmentMessage: hasAssessments
-      ? "Protected assessment material is kept out of the normal tutor prompt. AI_thena coaches the reasoning without revealing protected answers."
+      ? "Protected assessment material is kept out of the normal tutor prompt. AI_demo coaches the reasoning without revealing protected answers."
       : "No protected assessment material has been added.",
     intendedOutput:
       session.planningIntendedOutput ||

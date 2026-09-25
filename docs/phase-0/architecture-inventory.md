@@ -25,7 +25,7 @@ The Next.js production build succeeds. Prisma reports that the `driverAdapters` 
 | `/instructor/[sessionId]/misconceptions` | Instructor | Misunderstanding pattern review and overrides | Aggregate, override, recommendation, and difficulty APIs |
 | `/instructor/[sessionId]/report` | Instructor | Teaching brief and PDF export | Report and session APIs |
 | `/s/[accessCode]` | Learner | Session orientation and name entry | Server-side Prisma lookup; student-session API |
-| `/s/[accessCode]/chat` | Learner | Guided AI_thena conversation and summary | Chat and end-session APIs |
+| `/s/[accessCode]/chat` | Learner | Guided AI_demo conversation and summary | Chat and end-session APIs |
 
 ## API Surface
 

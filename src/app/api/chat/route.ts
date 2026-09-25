@@ -719,8 +719,8 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error: creditsUnavailable
-          ? "AI_thena’s model connection is temporarily unavailable. The demo owner needs to restore its Anthropic API access before live replies can continue."
-          : "AI_thena could not process that message. Please try again.",
+          ? "AI_demo’s model connection is temporarily unavailable. The demo owner needs to restore its Anthropic API access before live replies can continue."
+          : "AI_demo could not process that message. Please try again.",
         code: creditsUnavailable ? "MODEL_CREDITS" : "CHAT_FAILED",
       },
       { status: creditsUnavailable ? 503 : 500 }

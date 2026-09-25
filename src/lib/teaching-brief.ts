@@ -496,7 +496,7 @@ export async function buildStructuredTeachingBrief(
     },
     formativeUse: {
       statement:
-        "This teaching brief is formative. It summarizes evidence observed in this AI_thena session for instructor review.",
+        "This teaching brief is formative. It summarizes evidence observed in this AI_demo session for instructor review.",
       aiGeneratedStatement:
         "Narrative synthesis is AI-generated; evidence-map counts, links, opportunity coverage, and review states are assembled from stored records.",
       gradingBoundary:

@@ -409,7 +409,7 @@ If course context is available, use it naturally in the first three exchanges.`,
                       )}
                       <p className="mt-3 max-w-[40rem] text-[14px] leading-7 text-[var(--dim-grey)]">
                         Start by sharing what you already know about the topic.
-                        AI_thena will ask questions, look for evidence in your
+                        AI_demo will ask questions, look for evidence in your
                         reasoning, and stay grounded in the materials your
                         instructor provided. Try to explain your thinking
                         before asking for help. This is formative learning

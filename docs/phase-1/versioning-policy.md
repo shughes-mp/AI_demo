@@ -1,4 +1,4 @@
-# AI_thena Versioning And Reproducibility Policy
+# AI_demo Versioning And Reproducibility Policy
 
 Policy version: `versioning-1.0.0`
 

@@ -1,8 +1,8 @@
-# AI_thena Step-by-Step Implementation Roadmap
+# AI_demo Step-by-Step Implementation Roadmap
 
 ## Purpose
 
-This roadmap converts the complete AI_thena higher-rigor recommendation set into an ordered implementation programme.
+This roadmap converts the complete AI_demo higher-rigor recommendation set into an ordered implementation programme.
 
 The sequence is designed to:
 
@@ -20,20 +20,20 @@ The governing principle is:
 
 ## Intended Product
 
-AI_thena is an AI-assisted teaching, learning, and formative assessment system.
+AI_demo is an AI-assisted teaching, learning, and formative assessment system.
 
 Its complete operating loop should be:
 
 1. An instructor defines the learning purpose, source materials, learning outcomes, evidence questions, teaching context, and protected assessment materials.
 2. A learner engages in source-grounded dialogue requiring retrieval, interpretation, evidence, explanation, revision, and transfer.
-3. AI_thena records provisional evidence of learner thinking, including misunderstanding patterns, confidence calibration, process evidence, and outcome-related evidence.
+3. AI_demo records provisional evidence of learner thinking, including misunderstanding patterns, confidence calibration, process evidence, and outcome-related evidence.
 4. Every consequential signal remains traceable to learner dialogue and source material.
 5. The instructor reviews, corrects, approves, or rejects those signals.
-6. AI_thena recommends proportionate teaching moves, including Observer, Guide, or Conductor pivots where appropriate.
+6. AI_demo recommends proportionate teaching moves, including Observer, Guide, or Conductor pivots where appropriate.
 7. The instructor uses a teaching brief, live review signals, and planning tools to decide what to do next.
 8. Learners receive a formative summary and an opportunity to reflect.
 9. The institution can govern retention, access, privacy, and appropriate use.
-10. AI_thena is evaluated against actual instructional usefulness, not proxy metrics alone.
+10. AI_demo is evaluated against actual instructional usefulness, not proxy metrics alone.
 
 ## Delivery Rules
 
@@ -51,7 +51,7 @@ After that pathway works, extend the same architecture to other signal types.
 
 ### 2. Separate Observation From Inference
 
-AI_thena must distinguish:
+AI_demo must distinguish:
 
 - Observation: what a learner actually wrote or did
 - Evidence: the relevant exchange or source passage
@@ -138,7 +138,7 @@ Create an authoritative picture of what the application currently says, stores, 
 
 ### Acceptance Gate
 
-Every proposal in `AI_thena_higher_rigor_recommendations.md` has an owner, implementation location, dependency, and verification method.
+Every proposal in `AI_demo_higher_rigor_recommendations.md` has an owner, implementation location, dependency, and verification method.
 
 Gate result: **Passed for baseline purposes.** The traceability matrix provides owner roles, implementation locations, dependencies, statuses, and verification methods. This does not imply the product risks are resolved.
 
@@ -164,13 +164,13 @@ Status: **Complete (2026-06-18).** The binding contract set is recorded in `docs
 
 ### Objective
 
-Define what AI_thena means and what it is allowed to claim before changing deeper behavior.
+Define what AI_demo means and what it is allowed to claim before changing deeper behavior.
 
 ### 1.1 Product Contract
 
 Formally define:
 
-- AI_thena's purpose
+- AI_demo's purpose
 - Intended instructor and learner audiences
 - Formative uses
 - Prohibited or unsupported uses
@@ -183,7 +183,7 @@ Formally define:
 
 Create one canonical terminology module or specification covering:
 
-- `AI_thena`
+- `AI_demo`
 - `learning session` and `learning evidence session`
 - `teaching brief`
 - `review signals`
@@ -442,7 +442,7 @@ Ensure the core conversation produces genuine learning and useful evidence witho
 
 Verify that learners understand:
 
-- What AI_thena is
+- What AI_demo is
 - What it will ask them to do
 - That it uses instructor-provided materials
 - That it will not simply provide answers
@@ -656,7 +656,7 @@ Implement:
 Explain:
 
 - What evidence was observed
-- What AI_thena inferred
+- What AI_demo inferred
 - What confidence means
 - What the brief does not establish
 - How instructors can inspect sources
@@ -880,7 +880,7 @@ Status: **Complete and locally verified (2026-06-23).** This phase does not add 
 
 ### Objective
 
-Make AI_thena feel clear, obvious, and instructor-controlled without reducing evidence rigor.
+Make AI_demo feel clear, obvious, and instructor-controlled without reducing evidence rigor.
 
 ### 8.5.1 Instructor Journey
 
@@ -933,7 +933,7 @@ The UI should use clear headings, visible controls, plain-language empty states,
 
 ### Acceptance Gate
 
-A naive instructor can create, preview, share, monitor, review, and export a session without needing to understand internal AI_thena terminology, while still being able to inspect evidence and source-use details when desired.
+A naive instructor can create, preview, share, monitor, review, and export a session without needing to understand internal AI_demo terminology, while still being able to inspect evidence and source-use details when desired.
 
 Gate result: **Passed locally.** Type checking, linting, the full test suite, and production build pass after the completion pass. The remaining deployment smoke test should verify the preview-to-share path in the authenticated production environment.
 
@@ -954,8 +954,8 @@ Communicate:
 - What data is collected
 - Why the conversation is collected
 - Who can review it
-- What AI_thena infers
-- What AI_thena does not establish
+- What AI_demo infers
+- What AI_demo does not establish
 - How long data is retained
 - Whether the learner can access or contest summaries
 
@@ -1044,7 +1044,7 @@ Longitudinal views preserve context, provenance, opportunity coverage, and instr
 
 ### Objective
 
-Determine whether AI_thena improves learning and instructional decision-making in practice.
+Determine whether AI_demo improves learning and instructional decision-making in practice.
 
 Evaluation starts in Phase 0 and continues throughout implementation.
 
@@ -1090,7 +1090,7 @@ Measure:
 
 Measure:
 
-- Agreement between AI_thena and instructor mode choices
+- Agreement between AI_demo and instructor mode choices
 - Appropriateness of Observer recommendations
 - Appropriateness of Guide prompts
 - Proportionality of Conductor resets
@@ -1119,7 +1119,7 @@ Measure:
 - Whether those changes were useful
 - Whether instructors trusted the right outputs
 - Whether learners improved on subsequent tasks
-- Whether AI_thena reduced or increased instructor workload
+- Whether AI_demo reduced or increased instructor workload
 - Whether evidence maps and pivots improved class preparation
 
 ### Pilot Sequence
@@ -1135,7 +1135,7 @@ Measure:
 
 ### Release Gate
 
-AI_thena should not be treated as production-ready for consequential educational use until:
+AI_demo should not be treated as production-ready for consequential educational use until:
 
 - Evidence claims are traceable.
 - Instructor review works end to end.
@@ -1263,13 +1263,13 @@ The recommendation programme is complete only when all of the following are true
 
 ### Purpose And Language
 
-- [x] A naive reader can explain AI_thena's purpose accurately.
+- [x] A naive reader can explain AI_demo's purpose accurately.
 - [x] Terminology is consistent across UI, prompts, APIs, exports, and documentation.
 - [x] No visible feature implies automated grading or complete learner diagnosis.
 
 ### Learner Experience
 
-- [x] Learners understand the role of AI_thena and instructor review.
+- [x] Learners understand the role of AI_demo and instructor review.
 - [x] Conversations require reasoning rather than merely answer retrieval.
 - [x] Help is graduated and proportionate.
 - [x] Learners receive a formative summary and reflection opportunity.

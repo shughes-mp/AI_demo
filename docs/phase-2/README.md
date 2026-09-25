@@ -20,7 +20,7 @@ Status: **Complete (2026-06-19).**
 - An atomic supersession endpoint that links reprocessed signals, preserves prior reviews, and rejects uncited replacements.
 - A read-only `legacy-unversioned` compatibility section for misconceptions that predate provenance metadata.
 - Separate contradiction, missing-evidence, and alternative-interpretation qualification records for each new signal.
-- `AI_THENA_USE_LOCAL_DATABASE=1` for deterministic local verification when Turso credentials are also configured.
+- `AI_DEMO_USE_LOCAL_DATABASE=1` for deterministic local verification when Turso credentials are also configured.
 - Clerk-backed instructor authentication with protected instructor routes and APIs.
 - Session ownership plus delegated `owner`, `editor`, and `viewer` access, enforced server-side for every session API.
 - Explicit legacy-session ownership assignment through `LEGACY_SESSION_OWNER_CLERK_USER_ID`; legacy sessions are never silently claimed.

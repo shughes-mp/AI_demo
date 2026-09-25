@@ -8,7 +8,7 @@ import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "@prisma/client";
 
 test("migrated evidence database preserves normalized links and provenance", async () => {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "ai-thena-evidence-"));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "ai-demo-evidence-"));
   const dbPath = path.join(tempDir, "contract.db");
 
   try {

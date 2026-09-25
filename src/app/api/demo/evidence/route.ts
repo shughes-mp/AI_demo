@@ -5,7 +5,7 @@ import { generateInstructorReport } from "@/lib/report-generator";
 import { parseTeachingBrief } from "@/lib/teaching-brief";
 import { checkRateLimit, rateLimitExceededResponse } from "@/lib/rate-limit";
 
-const DEMO_SESSION_NAME_PREFIX = "AI_thena colleague demo ·";
+const DEMO_SESSION_NAME_PREFIX = "AI_demo colleague demo ·";
 
 export const maxDuration = 60;
 
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        source: "live_ai_thena",
+        source: "live_ai_demo",
         generatedAt: new Date().toISOString(),
         learner: {
           name: student.studentName,

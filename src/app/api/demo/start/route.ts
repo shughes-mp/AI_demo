@@ -6,7 +6,7 @@ import { createLearnerCapability } from "@/lib/learner-capability";
 import { checkRateLimit, rateLimitExceededResponse } from "@/lib/rate-limit";
 import { SYSTEMS_SOCIETY_DEMO } from "@/lib/demo/complex-systems-demo";
 
-export const DEMO_SESSION_NAME_PREFIX = "AI_thena colleague demo ·";
+export const DEMO_SESSION_NAME_PREFIX = "AI_demo colleague demo ·";
 
 const COURSE_MATERIALS = [
   {

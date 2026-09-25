@@ -960,7 +960,7 @@ export default function SessionManagementPage() {
                       <p className="eyebrow eyebrow-teal">Source use</p>
                       <p className="mt-2 leading-6 text-[var(--dim-grey)]">
                         {hasReadings
-                          ? "Claims about the reading are passage-checked. AI_thena may add helpful background, analogies, or examples, but it should not present those as if they came from the uploaded course material."
+                          ? "Claims about the reading are passage-checked. AI_demo may add helpful background, analogies, or examples, but it should not present those as if they came from the uploaded course material."
                           : "Upload at least one source material to make it the tutor&apos;s primary reference. General background can still be offered, but it will not be presented as course-reading content."}
                       </p>
                     </div>

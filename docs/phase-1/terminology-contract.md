@@ -1,4 +1,4 @@
-# AI_thena Terminology Contract
+# AI_demo Terminology Contract
 
 Contract version: `terminology-1.0.0`
 
@@ -6,7 +6,7 @@ Contract version: `terminology-1.0.0`
 
 | Canonical term | Definition | Use |
 |---|---|---|
-| AI_thena | The complete AI-assisted teaching, learning, and formative assessment system | Product and learner-facing assistant name |
+| AI_demo | The complete AI-assisted teaching, learning, and formative assessment system | Product and learner-facing assistant name |
 | Learning session | A configured learner interaction with a defined purpose | General core object |
 | Learning evidence session | A learning session explicitly designed to generate formative evidence | Instructor setup and formal documentation |
 | Source material | Instructor-provided content used as the evidence base | Uploads, citations, learner explanation |
@@ -63,7 +63,7 @@ Use language proportionate to the evidence:
 ### Provisional Inference
 
 - “Evidence suggests...”
-- “AI_thena identified a possible...”
+- “AI_demo identified a possible...”
 - “This may indicate...”
 - “The available dialogue does not establish...”
 
@@ -86,7 +86,7 @@ Avoid:
 
 | Deprecated term | Replacement | Migration treatment |
 |---|---|---|
-| AI tutor / tutor | AI_thena or guided learning assistant when category is needed | Remove from visible product copy; legacy code names may remain temporarily |
+| AI tutor / tutor | AI_demo or guided learning assistant when category is needed | Remove from visible product copy; legacy code names may remain temporarily |
 | Session target | Learning cycle purpose | Replace |
 | Key question / checkpoint | Evidence question | Keep checkpoint only as temporary internal model name |
 | Instructor recommendations | Teaching brief or suggested teaching moves | Replace |
@@ -125,13 +125,13 @@ Rules for legacy names:
 
 ## Capitalization And Style
 
-- Product: `AI_thena`
+- Product: `AI_demo`
 - Sentence case for interface labels
 - Use `learner`, not `student`, in product copy unless institution-specific context requires student
 - Use `instructor`, not teacher, as the general product role
 - Use “AI-generated,” not “AI assessed”
 - Use “formative,” not “low stakes,” unless low-stakes use is actually guaranteed
-- Avoid anthropomorphic certainty such as “AI_thena knows” or “AI_thena understands”
+- Avoid anthropomorphic certainty such as “AI_demo knows” or “AI_demo understands”
 
 ## Enforcement
 

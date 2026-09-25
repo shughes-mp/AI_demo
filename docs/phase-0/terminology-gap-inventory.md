@@ -13,7 +13,7 @@ This is not only a naming issue. Some legacy terms correspond to behavior that c
 | Landing page | Teaching, learning, formative evidence, instructor judgment | Implemented but unverified with naive readers |
 | Session creation | Learning evidence session language | Implemented but unverified |
 | Workspace | Source grounding, evidence questions, protected materials | Partially implemented; behavior lacks citations and robust protection tests |
-| Learner entry/chat | AI_thena, reasoning, formative review, source grounding | Partially implemented; system prompt still self-identifies as tutor |
+| Learner entry/chat | AI_demo, reasoning, formative review, source grounding | Partially implemented; system prompt still self-identifies as tutor |
 | Learner summary | Purpose-neutral formative summary | Implemented but unverified |
 | Instructor monitoring | Review signals and evidence language | Partially implemented; underlying API still uses engagement flags and rubric status |
 | Teaching brief | Evidence language and evidence maps | Partially implemented; generated report remains prose and tag extraction |
@@ -23,11 +23,11 @@ This is not only a naming issue. Some legacy terms correspond to behavior that c
 | Database | Legacy assessment/mastery/diagnostic model | Not aligned |
 | Prompts | Strong pedagogy and source rules, but tutor/mastery/assessment language remains | Partially aligned |
 | APIs and TypeScript | Legacy names and strong classifications remain | Not aligned |
-| Exports | AI_thena branding and prose report | Partially aligned; lacks review/provenance metadata |
+| Exports | AI_demo branding and prose report | Partially aligned; lacks review/provenance metadata |
 
 ## Preferred Terms And Remaining Gaps
 
-### AI_thena
+### AI_demo
 
 Present in visible branding and revised UI.
 

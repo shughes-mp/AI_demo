@@ -306,7 +306,7 @@ export function EvidenceReviewPanel({ sessionId }: EvidenceReviewPanelProps) {
         <div className="minerva-card p-8">
           <h2 className="font-serif text-2xl text-[var(--charcoal)]">No learner evidence needs review yet</h2>
           <p className="mt-2 max-w-2xl text-sm text-[var(--dim-grey)]">
-            Signals will appear here when AI_thena can connect a learner claim to a source passage that may need instructor judgment.
+            Signals will appear here when AI_demo can connect a learner claim to a source passage that may need instructor judgment.
           </p>
         </div>
       ) : visibleSignals.length === 0 ? (
